@@ -10,4 +10,6 @@ Documentatie (week 1 oplevering):
 Setup:
 - docs/setup.md
 
-Kernfeatures (doel): registreren/inloggen, profielen, posts, likes, comments, en een adminomgeving voor moderatie.
+Kernfeatures (doel): registreren/inloggen, profielen, fotos,  posts, likes, comments, en een adminomgeving voor moderatie.
+
+toevoegen: subreddits / groepens
