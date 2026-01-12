@@ -1,6 +1,8 @@
 </div>
-
-<footer class="mt-5 mb-4">
+<head>
+    <link rel="stylesheet" href="<?= e(url('/assets/css/style.css')) ?>">
+</head>
+<footer class="mt-5 mb-4 bg-dark text-white py-3">
     <div class="container text-center">
         <ul class="list-inline mb-2">
             <li class="list-inline-item"><a href="#">Rules</a></li>

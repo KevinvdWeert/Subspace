@@ -6,7 +6,8 @@ require_once __DIR__ . '/includes/auth.php';
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
-
+?>
+<?php
 $user = current_user();
 $pdo = Db::pdo();
 
@@ -90,7 +91,7 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 <?php endif; ?>
 
-<h1 class="mb-4">Feed</h1>
+<h1 class="mb-4 bg-dark text-white py-3">Feed</h1>
 
 <?php
 $stmt = $pdo->query(
@@ -107,7 +108,7 @@ $posts = $stmt->fetchAll();
 ?>
 
 <?php if (!$user): ?>
-    <div class="alert alert-info">
+    <div class="alert alert-info bg-dark text-white py-3">
         Je bent niet ingelogd. <a href="<?= e(url('/login.php')) ?>">Login</a> of <a href="<?= e(url('/register.php')) ?>">registreer</a> om te posten.
     </div>
 <?php else: ?>
@@ -122,7 +123,7 @@ $posts = $stmt->fetchAll();
 <?php endif; ?>
 
 <?php if (!$posts): ?>
-    <p class="text-muted">Nog geen posts.</p>
+    <p class="text-muted bg-dark text-white py-3">Nog geen posts.</p>
 <?php endif; ?>
 
 <?php foreach ($posts as $post): ?>
@@ -134,8 +135,8 @@ $posts = $stmt->fetchAll();
         $hasLiked = (bool)$stmt->fetchColumn();
     }
     ?>
-    <div class="card mb-3">
-        <div class="card-body">
+    <div class="card mb-3 bg-dark text-white py-3">
+        <div class="card-body bg-dark text-white py-3">
             <div class="d-flex justify-content-between">
                 <div>
                     <strong><?= e($post['username']) ?></strong>
@@ -162,5 +163,4 @@ $posts = $stmt->fetchAll();
         </div>
     </div>
 <?php endforeach; ?>
-
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
