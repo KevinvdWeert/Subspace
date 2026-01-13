@@ -25,6 +25,46 @@ function app_base_path(): string
     return $base;
 }
 
+function project_relative_prefix(): string
+{
+    static $prefix = null;
+    if ($prefix !== null) {
+        return $prefix;
+    }
+
+    $scriptName = (string)($_SERVER['SCRIPT_NAME'] ?? '');
+    $scriptName = str_replace('\\', '/', $scriptName);
+
+    $dir = trim(str_replace('\\', '/', (string)dirname($scriptName)), '/');
+    if ($dir === '' || $dir === '.') {
+        $prefix = '';
+        return $prefix;
+    }
+
+    $parts = explode('/', $dir);
+
+    // The project root folder name (expected: 'Subspace').
+    $projectFolder = basename(dirname(__DIR__));
+
+    $projectIndex = -1;
+    foreach ($parts as $i => $part) {
+        if ($part === $projectFolder) {
+            $projectIndex = $i;
+        }
+    }
+
+    if ($projectIndex === -1) {
+        // Fallback: assume project is web-root; climb to root from current directory.
+        $levels = count(array_filter($parts, static fn($p) => $p !== ''));
+        $prefix = $levels > 0 ? str_repeat('../', $levels) : '';
+        return $prefix;
+    }
+
+    $levelsAfterProject = count($parts) - ($projectIndex + 1);
+    $prefix = $levelsAfterProject > 0 ? str_repeat('../', $levelsAfterProject) : '';
+    return $prefix;
+}
+
 function url(string $path = '/'): string
 {
     $path = (string)$path;
@@ -34,26 +74,15 @@ function url(string $path = '/'): string
         return $path;
     }
 
-    if ($path === '') {
-        $path = '/';
+    $prefix = project_relative_prefix();
+
+    // Normalize leading slash to keep everything relative to the project root.
+    $normalized = ltrim($path, '/');
+    if ($normalized === '' || $normalized === '.') {
+        return $prefix;
     }
 
-    if ($path[0] !== '/') {
-        $path = '/' . $path;
-    }
-
-    $base = trim(app_base_path());
-    if ($base === '' || $base === '/') {
-        return $path;
-    }
-
-    // If base is a full URL, join as URL.
-    if (preg_match('#^https?://#i', $base) === 1) {
-        return rtrim($base, '/') . $path;
-    }
-
-    // Otherwise treat it as a path prefix.
-    return rtrim($base, '/') . $path;
+    return $prefix . $normalized;
 }
 
 function redirect(string $path): never

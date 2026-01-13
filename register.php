@@ -8,7 +8,7 @@ require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 
 if (current_user()) {
-    redirect('/index.php');
+    redirect('index.php');
 }
 
 $errors = [];
@@ -78,7 +78,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
             session_regenerate_id(true);
             $_SESSION['user_id'] = $userId;
-            redirect('/index.php');
+            redirect('index.php');
         }
     }
 }
@@ -88,7 +88,7 @@ require_once __DIR__ . '/includes/header.php';
 
 <h1 class="mb-4">Registreren</h1>
 
-<form method="post" action="<?= e(url('/register.php')) ?>" class="card card-body">
+<form method="post" action="<?= e(url('register.php')) ?>" class="card card-body">
     <div class="form-group">
         <label for="username">Username</label>
         <input id="username" name="username" class="form-control" required value="<?= e($old['username'] ?? '') ?>">
@@ -116,7 +116,7 @@ require_once __DIR__ . '/includes/header.php';
     <button class="btn btn-primary" type="submit">Account maken</button>
 
     <p class="mt-3 mb-0">
-        Heb je al een account? <a href="<?= e(url('/login.php')) ?>">Login</a>
+        Heb je al een account? <a href="<?= e(url('login.php')) ?>">Login</a>
     </p>
 </form>
 

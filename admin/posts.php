@@ -21,12 +21,12 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
     $postId = (int)($_POST['post_id'] ?? 0);
     if ($postId <= 0) {
-        redirect('/admin/posts.php');
+        redirect('admin/posts.php');
     }
 
     $stmt = $pdo->prepare('UPDATE posts SET is_hidden = 1 - is_hidden, updated_at = :updated_at WHERE id = :id');
     $stmt->execute([':updated_at' => now_datetime(), ':id' => $postId]);
-    redirect('/admin/posts.php');
+    redirect('admin/posts.php');
 }
 
 require_once __DIR__ . '/../includes/header.php';
@@ -67,8 +67,8 @@ $posts = $stmt->fetchAll();
                     <?php endif; ?>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-link" href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">Open</a>
-                    <form method="post" action="<?= e(url('/admin/posts.php')) ?>" class="d-inline">
+                    <a class="btn btn-sm btn-link" href="<?= e(url('post.php?id=' . (int)$post['id'])) ?>">Open</a>
+                    <form method="post" action="<?= e(url('admin/posts.php')) ?>" class="d-inline">
                         <input type="hidden" name="action" value="toggle_hide">
                         <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
                         <button class="btn btn-sm btn-outline-secondary" type="submit">

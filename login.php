@@ -8,7 +8,7 @@ require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 
 if (current_user()) {
-    redirect('/index.php');
+    redirect('index.php');
 }
 
 $errors = [];
@@ -44,7 +44,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             } else {
                 session_regenerate_id(true);
                 $_SESSION['user_id'] = $userId;
-                redirect('/index.php');
+                redirect('index.php');
             }
         }
     }
@@ -55,7 +55,7 @@ require_once __DIR__ . '/includes/header.php';
 
 <h1 class="mb-4">Login</h1>
 
-<form method="post" action="<?= e(url('/login.php')) ?>" class="card card-body">
+<form method="post" action="<?= e(url('login.php')) ?>" class="card card-body">
     <div class="form-group">
         <label for="login">Username of e-mail</label>
         <input id="login" name="login" class="form-control" required value="<?= e($old['login'] ?? '') ?>">
@@ -71,7 +71,7 @@ require_once __DIR__ . '/includes/header.php';
     <button class="btn btn-primary" type="submit">Inloggen</button>
 
     <p class="mt-3 mb-0">
-        Nog geen account? <a href="<?= e(url('/register.php')) ?>">Registreren</a>
+        Nog geen account? <a href="<?= e(url('register.php')) ?>">Registreren</a>
     </p>
 </form>
 

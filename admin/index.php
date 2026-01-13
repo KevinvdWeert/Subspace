@@ -51,8 +51,8 @@ $blocked = (int)$pdo->query(
 </div>
 
 <div class="mt-4">
-    <a class="btn btn-outline-primary" href="<?= e(url('/admin/posts.php')) ?>">Moderatie: posts</a>
-    <a class="btn btn-outline-primary" href="<?= e(url('/admin/users.php')) ?>">Users: blokkeren</a>
+    <a class="btn btn-outline-primary" href="<?= e(url('admin/posts.php')) ?>">Moderatie: posts</a>
+    <a class="btn btn-outline-primary" href="<?= e(url('admin/users.php')) ?>">Users: blokkeren</a>
 </div>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

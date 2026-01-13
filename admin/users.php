@@ -24,10 +24,10 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
     $targetUserId = (int)($_POST['user_id'] ?? 0);
     if ($targetUserId <= 0) {
-        redirect('/admin/users.php');
+        redirect('admin/users.php');
     }
     if ($targetUserId === $currentId) {
-        redirect('/admin/users.php?err=self');
+        redirect('admin/users.php?err=self');
     }
 
     $stmt = $pdo->prepare(
@@ -58,7 +58,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         ]);
     }
 
-    redirect('/admin/users.php');
+    redirect('admin/users.php');
 }
 
 require_once __DIR__ . '/../includes/header.php';
@@ -120,7 +120,7 @@ $blockedUserIds = array_flip(array_map('intval', $activeBlocksStmt->fetchAll(PDO
                     <?php if ($uid === $currentId): ?>
                         <span class="text-muted">(jij)</span>
                     <?php else: ?>
-                        <form method="post" action="<?= e(url('/admin/users.php')) ?>" class="d-inline">
+                        <form method="post" action="<?= e(url('admin/users.php')) ?>" class="d-inline">
                             <input type="hidden" name="action" value="toggle_block">
                             <input type="hidden" name="user_id" value="<?= $uid ?>">
                             <button class="btn btn-sm btn-outline-secondary" type="submit">

@@ -19,7 +19,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if ($action === 'post_create') {
         $content = trim((string)($_POST['content'] ?? ''));
         if ($content === '' || strlen($content) > 2000) {
-            redirect('/index.php?err=post');
+            redirect('index.php?err=post');
         }
 
         $stmt = $pdo->prepare(
@@ -35,20 +35,20 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             ':updated_at' => $now,
         ]);
 
-        redirect('/index.php?ok=post');
+        redirect('index.php?ok=post');
     }
 
     if ($action === 'like_toggle') {
         $postId = (int)($_POST['post_id'] ?? 0);
         if ($postId <= 0) {
-            redirect('/index.php');
+            redirect('index.php');
         }
 
         $stmt = $pdo->prepare('SELECT is_hidden FROM posts WHERE id = :id');
         $stmt->execute([':id' => $postId]);
         $row = $stmt->fetch();
         if (!$row) {
-            redirect('/index.php');
+            redirect('index.php');
         }
         if ((int)$row['is_hidden'] === 1 && !is_admin()) {
             http_response_code(403);
@@ -67,7 +67,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             $stmt->execute([':post_id' => $postId, ':user_id' => (int)$user['id'], ':created_at' => now_datetime()]);
         }
 
-        redirect('/index.php');
+        redirect('index.php');
     }
 
     http_response_code(400);
@@ -109,11 +109,11 @@ $posts = $stmt->fetchAll();
 
 <?php if (!$user): ?>
     <div class="alert alert-info" style="color: var(--text-color); background-color: var(--secondary-color);">
-        Je bent niet ingelogd. <a href="<?= e(url('/login.php')) ?>">Login</a> of <a href="<?= e(url('/register.php')) ?>">registreer</a> om te posten.
+        Je bent niet ingelogd. <a href="<?= e(url('login.php')) ?>">Login</a> of <a href="<?= e(url('register.php')) ?>">registreer</a> om te posten.
     </div>
 <?php else: ?>
     <?php require_not_blocked(); ?>
-    <form method="post" action="<?= e(url('/index.php')) ?>" class="card card-body mb-4" style ="color: var(--text-color); background-color: var(--secondary-color);">
+    <form method="post" action="<?= e(url('index.php')) ?>" class="card card-body mb-4" style ="color: var(--text-color); background-color: var(--secondary-color);">
         <input type="hidden" name="action" value="post_create">
         <div class="form-group mb-2">
             <textarea name="content" class="form-control" rows="3" required placeholder="Wat wil je delen?"></textarea>
@@ -142,13 +142,13 @@ $posts = $stmt->fetchAll();
                     <strong><?= e($post['username']) ?></strong>
                     <span class="text-muted">• <?= e($post['created_at']) ?></span>
                 </div>
-                <a class="btn btn-sm btn-link" href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">Open</a>
+                <a class="btn btn-sm btn-link" href="<?= e(url('post.php?id=' . (int)$post['id'])) ?>">Open</a>
             </div>
 
             <p class="mt-3 mb-3"><?= nl2br(e($post['content'])) ?></p>
 
             <div class="d-flex align-items-center">
-                <form method="post" action="<?= e(url('/index.php')) ?>" class="mr-2" style="color: var(--text-color);">
+                <form method="post" action="<?= e(url('index.php')) ?>" class="mr-2" style="color: var(--text-color);">
                     <input type="hidden" name="action" value="like_toggle">
                     <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
                     <button class="btn btn-sm <?= $hasLiked ? 'btn-secondary' : 'btn-outline-secondary' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>
@@ -156,7 +156,7 @@ $posts = $stmt->fetchAll();
                     </button>
                 </form>
 
-                <a class="btn btn-sm btn-outline-secondary" href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">
+                <a class="btn btn-sm btn-outline-secondary" href="<?= e(url('post.php?id=' . (int)$post['id'])) ?>">
                     Comments (<?= (int)$post['comment_count'] ?>)
                 </a>
             </div>

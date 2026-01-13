@@ -47,7 +47,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             ':user_id' => (int)$user['id'],
         ]);
 
-        redirect('/profile.php?ok=1');
+        redirect('profile.php?ok=1');
     }
 }
 
@@ -80,7 +80,7 @@ $profile = $stmt->fetch();
 </div>
 
 <h2 class="h4">Profiel bewerken</h2>
-<form method="post" action="<?= e(url('/profile.php')) ?>" class="card card-body mb-4">
+<form method="post" action="<?= e(url('profile.php')) ?>" class="card card-body mb-4">
     <div class="form-group">
         <label for="display_name">Display name</label>
         <input id="display_name" name="display_name" class="form-control" value="<?= e($profile['display_name'] ?? '') ?>">

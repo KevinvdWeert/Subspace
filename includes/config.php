@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 return [
     'app' => [
-        // If your project runs under a subfolder like http://localhost/Subspace,
-        // set this to '/Subspace'. Leave empty when running at domain root.
-        'base_path' => 'http://localhost/projecten/Subspace/',
+        // Keep paths relative to the project root folder.
+        // NOTE: URL generation is handled dynamically in includes/helpers.php.
+        // This value is kept for backward compatibility, but should stay empty.
+        'base_path' => '',
     ],
     'db' => [
         'host' => '127.0.0.1',

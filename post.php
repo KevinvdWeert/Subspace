@@ -26,7 +26,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $stmt->execute([':id' => $postId]);
     $row = $stmt->fetch();
     if (!$row) {
-        redirect('/index.php');
+        redirect('index.php');
     }
     if ((int)$row['is_hidden'] === 1 && !is_admin()) {
         http_response_code(403);
@@ -46,13 +46,13 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             $stmt->execute([':post_id' => $postId, ':user_id' => (int)$user['id'], ':created_at' => now_datetime()]);
         }
 
-        redirect('/post.php?id=' . $postId);
+        redirect('post.php?id=' . $postId);
     }
 
     if ($action === 'comment_create') {
         $content = trim((string)($_POST['content'] ?? ''));
         if ($content === '' || strlen($content) > 2000) {
-            redirect('/post.php?id=' . $postId . '&err=comment');
+            redirect('post.php?id=' . $postId . '&err=comment');
         }
 
         $stmt = $pdo->prepare(
@@ -66,7 +66,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             ':created_at' => now_datetime(),
         ]);
 
-        redirect('/post.php?id=' . $postId . '&ok=comment');
+        redirect('post.php?id=' . $postId . '&ok=comment');
     }
 
     http_response_code(400);
@@ -140,7 +140,7 @@ if ($user) {
 }
 ?>
 
-<a class="btn btn-link px-0" href="<?= e(url('/index.php')) ?>">&larr; Terug naar feed</a>
+<a class="btn btn-link px-0" href="<?= e(url('index.php')) ?>">&larr; Terug naar feed</a>
 
 <div class="card mb-3">
     <div class="card-body">
@@ -157,7 +157,7 @@ if ($user) {
         <p class="mt-3 mb-3"><?= nl2br(e($post['content'])) ?></p>
 
         <div class="d-flex align-items-center">
-            <form method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>" class="mr-2">
+            <form method="post" action="<?= e(url('post.php?id=' . (int)$post['id'])) ?>" class="mr-2">
                 <input type="hidden" name="action" value="like_toggle">
                 <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
                 <button class="btn btn-sm <?= $hasLiked ? 'btn-secondary' : 'btn-outline-secondary' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>
@@ -172,7 +172,7 @@ if ($user) {
 
 <?php if ($user): ?>
     <?php require_not_blocked(); ?>
-    <form method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>" class="card card-body mb-3">
+    <form method="post" action="<?= e(url('post.php?id=' . (int)$post['id'])) ?>" class="card card-body mb-3">
         <input type="hidden" name="action" value="comment_create">
         <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
         <textarea name="content" class="form-control mb-2" rows="3" required placeholder="Plaats een reactie..."></textarea>
