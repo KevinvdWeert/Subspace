@@ -38,7 +38,7 @@ $user = current_user();
             <?php endif; ?>
         </ul>
 
-        <ul class="navbar-nav" style="color: var(--primary-color);>
+        <ul class="navbar-nav" style="color: var(--primary-color);">
             <?php if ($user): ?>
                 <li class="nav-item"><span class="navbar-text mr-3">Ingelogd als <?= e($user['username'] ?? '') ?></span></li>
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('/logout.php')) ?>">Logout</a></li>
