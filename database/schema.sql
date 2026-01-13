@@ -1,6 +1,6 @@
 -- Subspace database schema (MySQL)
 
-CREATE DATABASE IF NOT EXISTS social_app
+CREATE DATABASE IF NOT EXISTS Subspace
   DEFAULT CHARACTER SET utf8mb4
   DEFAULT COLLATE utf8mb4_unicode_ci;
 
