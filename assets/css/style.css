@@ -1,3 +1,7 @@
-.card p:last-child {
-    margin-bottom: 0;
+/* root colors */
+:root {
+    --primary-color : #345FF9;
+    --secondary-color : #67ade7;
+    --background-color : #ffffff;
+    --text-color : #000000;
 }

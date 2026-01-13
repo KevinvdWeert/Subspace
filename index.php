@@ -90,7 +90,7 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 <?php endif; ?>
 
-<h1 class="mb-4">Feed</h1>
+<h1 class="mb-4" style="color: var(--text-color);">Feed</h1>
 
 <?php
 $stmt = $pdo->query(
@@ -106,13 +106,14 @@ $stmt = $pdo->query(
 $posts = $stmt->fetchAll();
 ?>
 
+
 <?php if (!$user): ?>
-    <div class="alert alert-info">
+    <div class="alert alert-info" style="color: var(--text-color); background-color: var(--secondary-color);">
         Je bent niet ingelogd. <a href="<?= e(url('/login.php')) ?>">Login</a> of <a href="<?= e(url('/register.php')) ?>">registreer</a> om te posten.
     </div>
 <?php else: ?>
     <?php require_not_blocked(); ?>
-    <form method="post" action="<?= e(url('/index.php')) ?>" class="card card-body mb-4">
+    <form method="post" action="<?= e(url('/index.php')) ?>" class="card card-body mb-4" style ="color: var(--text-color); background-color: var(--secondary-color);">
         <input type="hidden" name="action" value="post_create">
         <div class="form-group mb-2">
             <textarea name="content" class="form-control" rows="3" required placeholder="Wat wil je delen?"></textarea>
@@ -147,7 +148,7 @@ $posts = $stmt->fetchAll();
             <p class="mt-3 mb-3"><?= nl2br(e($post['content'])) ?></p>
 
             <div class="d-flex align-items-center">
-                <form method="post" action="<?= e(url('/index.php')) ?>" class="mr-2">
+                <form method="post" action="<?= e(url('/index.php')) ?>" class="mr-2" style="color: var(--text-color);">
                     <input type="hidden" name="action" value="like_toggle">
                     <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
                     <button class="btn btn-sm <?= $hasLiked ? 'btn-secondary' : 'btn-outline-secondary' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>

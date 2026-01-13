@@ -20,14 +20,14 @@ $user = current_user();
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
-<body>
+<body style="color: var(--text-color);">
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="<?= e(url('/index.php')) ?>">Subspace</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
+    <div class="collapse navbar-collapse" id="navbarNav" style="color: var(--primary-color);">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item"><a class="nav-link" href="<?= e(url('/index.php')) ?>">Feed</a></li>
             <?php if ($user): ?>
@@ -38,7 +38,7 @@ $user = current_user();
             <?php endif; ?>
         </ul>
 
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" style="color: var(--primary-color);>
             <?php if ($user): ?>
                 <li class="nav-item"><span class="navbar-text mr-3">Ingelogd als <?= e($user['username'] ?? '') ?></span></li>
                 <li class="nav-item"><a class="nav-link" href="<?= e(url('/logout.php')) ?>">Logout</a></li>
@@ -50,5 +50,4 @@ $user = current_user();
     </div>
 </nav>
 
-<div class="container mt-4">
-    
+<div class="container mt-4" style="color: var(--text-color);">
