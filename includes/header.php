@@ -20,6 +20,7 @@ $user = current_user();
 </head>
 
 <body>
+<div class="layout-wrapper">
 <nav>
     <a class="navbar-brand" href="<?= e(url('/index.php')) ?>">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="reddit-logo">
@@ -56,5 +57,6 @@ $user = current_user();
     </ul>
 </nav>
 
+<div class="content-wrapper">
 <main>
     

@@ -9,5 +9,8 @@
     <a href="#">Terms</a>
     <p class="text-muted">&copy; <?php echo date('Y'); ?> Subspace. All rights reserved.</p>
 </footer>
+
+</div>
+</div>
 </body>
 </html>
