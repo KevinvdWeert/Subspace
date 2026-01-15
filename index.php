@@ -75,6 +75,8 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     exit('Bad Request');
 }
 
+// Test for notices
+
 $notice = null;
 if (isset($_GET['ok']) && $_GET['ok'] === 'post') {
     $notice = ['type' => 'success', 'message' => 'Post geplaatst.'];
