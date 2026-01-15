@@ -21,14 +21,6 @@ $user = current_user();
 
 <body>
 <nav>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-    <ul>
-        <li><a href="<?= e(url('/index.php')) ?>"><strong>Subspace</strong></a></li>
-        <li><a href="<?= e(url('/index.php')) ?>">Feed</a></li>
-=======
-=======
->>>>>>> Stashed changes
     <a class="navbar-brand" href="<?= e(url('/index.php')) ?>">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="reddit-logo">
             <g>
@@ -41,40 +33,22 @@ $user = current_user();
 
     <ul>
         <li><a href="<?= e(url('/index.php')) ?>">Home</a></li>
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
         <?php if ($user): ?>
             <li><a href="<?= e(url('/profile.php')) ?>">Profiel</a></li>
             <?php if (($user['role'] ?? '') === 'admin'): ?>
                 <li><a href="<?= e(url('/admin/index.php')) ?>">Admin</a></li>
             <?php endif; ?>
         <?php endif; ?>
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
+
         <li style="margin-left: auto;">
             <?php if ($user): ?>
                 <span style="color: var(--text-muted); padding: 0 16px;">Ingelogd als <?= e($user['username'] ?? '') ?></span>
             <?php endif; ?>
         </li>
-        <?php if ($user): ?>
-            <li><a href="<?= e(url('/logout.php')) ?>">Logout</a></li>
-=======
-=======
->>>>>>> Stashed changes
-    </ul>
 
-    <ul style="margin-top: auto; border-top: 1px solid var(--border-color); padding-top: 8px;">
         <?php if ($user): ?>
             <li><a href="<?= e(url('/logout.php')) ?>">Logout</a></li>
-            <li style="padding: 12px 16px; color: var(--text-muted); font-size: 12px;">
-                Ingelogd als <strong><?= e($user['username'] ?? '') ?></strong>
-            </li>
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
         <?php else: ?>
             <li><a href="<?= e(url('/login.php')) ?>">Login</a></li>
             <li><a href="<?= e(url('/register.php')) ?>">Registreren</a></li>
