@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 </main>
 <footer>
     <a href="#">Rules</a>
@@ -11,3 +12,5 @@
 </footer>
 </body>
 </html>
+=======
+>>>>>>> Stashed changes

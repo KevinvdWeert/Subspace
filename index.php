@@ -93,7 +93,11 @@ require_once __DIR__ . '/includes/header.php';
     </div>
 <?php endif; ?>
 
+<<<<<<< Updated upstream
 <h1>Feed</h1>
+=======
+<h1 class="m-0 text-white py-3">Feed</h1>
+>>>>>>> Stashed changes
 
 <?php
 $stmt = $pdo->query(
@@ -110,12 +114,20 @@ $posts = $stmt->fetchAll();
 ?>
 
 <?php if (!$user): ?>
+<<<<<<< Updated upstream
     <div class="message">
+=======
+    <div class="alert alert-info text-white py-3">
+>>>>>>> Stashed changes
         Je bent niet ingelogd. <a href="<?= e(url('/login.php')) ?>">Login</a> of <a href="<?= e(url('/register.php')) ?>">registreer</a> om te posten.
     </div>
 <?php else: ?>
     <?php require_not_blocked(); ?>
+<<<<<<< Updated upstream
     <form method="post" action="<?= e(url('/index.php')) ?>">
+=======
+    <form method="post" action="<?= e(url('/index.php')) ?>" class="card card-body">
+>>>>>>> Stashed changes
         <input type="hidden" name="action" value="post_create">
         <div>
             <textarea name="content" rows="3" required placeholder="Wat wil je delen?"></textarea>
@@ -125,7 +137,11 @@ $posts = $stmt->fetchAll();
 <?php endif; ?>
 
 <?php if (!$posts): ?>
+<<<<<<< Updated upstream
     <p class="text-muted">Nog geen posts.</p>
+=======
+    <p class="text-muted text-white py-3">Nog geen posts.</p>
+>>>>>>> Stashed changes
 <?php endif; ?>
 
 <?php foreach ($posts as $post): ?>
@@ -137,6 +153,7 @@ $posts = $stmt->fetchAll();
         $hasLiked = (bool)$stmt->fetchColumn();
     }
     ?>
+<<<<<<< Updated upstream
     <div class="post">
         <div class="post-vote">
             <span><?= (int)$post['like_count'] ?></span>
@@ -146,6 +163,14 @@ $posts = $stmt->fetchAll();
                 <div class="post-meta">
                     <span><strong><?= e($post['username']) ?></strong></span>
                     <span><?= e($post['created_at']) ?></span>
+=======
+    <div class="card mb-3 text-white py-3">
+        <div class="card-body text-white py-3">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <strong><?= e($post['username']) ?></strong>
+                    <span class="text-muted">• <?= e($post['created_at']) ?></span>
+>>>>>>> Stashed changes
                 </div>
             </div>
 
