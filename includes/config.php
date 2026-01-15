@@ -9,7 +9,7 @@ return [
     'app' => [
         // If your project runs under a subfolder like http://localhost/Subspace,
         // set this to '/Subspace'. Leave empty when running at domain root.
-        'base_path' => 'http://localhost/projecten/Subspace/',
+        'base_path' => '/projecten/Subspace',
     ],
     'db' => [
         'host' => '127.0.0.1',

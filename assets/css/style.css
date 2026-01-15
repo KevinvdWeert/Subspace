@@ -129,8 +129,7 @@ nav a:hover {
 
 /* Main Container - Reddit Feed Style */
 main, .container {
-    max-width: 640px;
-    margin: 20px auto;
+    margin: 1rem;
     padding: 0 16px;
     flex: 1;
 }
@@ -635,7 +634,29 @@ footer a:hover {
     background-color: var(--reddit-orange-hover);
 }
 
-.container, body, .alert, .card {
+.layout, body, .alert, .card {
+    background-color: var(--bg-primary) !important;
+    margin: 0 !important;
+}
+
+.card {
+    border-color: var(--border-color) !important;
+    color: white !important;
+}
+
+button[type="submit"], .btn {
+    background-color: var(--reddit-orange) !important;
+    color: white !important;
+    border: none !important;
+}
+
+input, textarea, select {
+    background-color: var(--bg-secondary) !important;
+    color: white !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.container, body, .alert, .card, nav, footer {
     background-color: var(--bg-primary) !important;
     margin: 0 !important;
 }
