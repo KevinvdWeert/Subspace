@@ -5,7 +5,7 @@
 **Leerjaar:** 2  
 **Periode:** 3 weken  
 **Datum:** 7 januari 2026  
-**Teamleden:** Kevin, kijan
+**Teamleden:** Kevin, kijan, luka
 
 ---
 
@@ -69,8 +69,6 @@ Documentatie die we vóór het bouwen opleveren:
 
 Koppelingen naar de uitwerkingen:
 - Planning: [planning.md](planning.md)
-- Backlog: [backlog.md](backlog.md)
-- Wireframes: [wireframes.md](wireframes.md)
 - Database/ERD: [erd.md](erd.md)
 
 ## Aandachtspunten (kwaliteit & security)
@@ -111,17 +109,3 @@ We leveren op:
 ### B1-K1-W3 — Realiseert (onderdelen van) software
 - Overzichtelijke code (structuur, includes, database helper/klasse).
 - Voldoende testdata (users/posts/comments) om functies te demonstreren.
-
-### B1-K2-W2 — Presenteert opgeleverd werk
-- Demo met uitleg: functionaliteit, keuzes, samenwerking/taakverdeling.
-
-## Evaluatievragen
-Neem dit na afloop in de eindreflectie op:
-1. Heb je geoefend wat je uiteindelijk moet kunnen?
-2. Wist je wat er van je werd verwacht?
-3. Vond je het interessant?
-4. Had je het gevoel dat het je wel zou lukken?
-5. Was het niet te moeilijk of te makkelijk?
-6. Kreeg je informatieve feedback als je dat nodig had?
-7. Voelde je je serieus genomen?
-8. Had je keuzevrijheid? Voelde je je in controle?
