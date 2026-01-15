@@ -338,6 +338,21 @@ tr:hover {
     color: var(--link-color);
 }
 
+small.error {
+    display: block;
+    padding: 4px 0;
+    margin-bottom: 8px;
+    border: none;
+    background: none;
+    font-size: 12px;
+}
+
+/* Form styling improvements */
+form p {
+    margin-top: 16px;
+    margin-bottom: 0;
+}
+
 /* Posts - Reddit Card Style */
 .post {
     background-color: var(--bg-card);

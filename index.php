@@ -88,12 +88,12 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
 <?php if ($notice): ?>
-    <div class="alert alert-<?= e($notice['type']) ?>" role="alert">
+    <div class="<?= e($notice['type'] === 'success' ? 'success' : 'error') ?>">
         <?= e($notice['message']) ?>
     </div>
 <?php endif; ?>
 
-<h1 class="mb-4 bg-dark text-white py-3">Feed</h1>
+<h1>Feed</h1>
 
 <?php
 $stmt = $pdo->query(
@@ -110,22 +110,22 @@ $posts = $stmt->fetchAll();
 ?>
 
 <?php if (!$user): ?>
-    <div class="alert alert-info bg-dark text-white py-3">
+    <div class="message">
         Je bent niet ingelogd. <a href="<?= e(url('/login.php')) ?>">Login</a> of <a href="<?= e(url('/register.php')) ?>">registreer</a> om te posten.
     </div>
 <?php else: ?>
     <?php require_not_blocked(); ?>
-    <form method="post" action="<?= e(url('/index.php')) ?>" class="card card-body mb-4">
+    <form method="post" action="<?= e(url('/index.php')) ?>">
         <input type="hidden" name="action" value="post_create">
-        <div class="form-group mb-2">
-            <textarea name="content" class="form-control" rows="3" required placeholder="Wat wil je delen?"></textarea>
+        <div>
+            <textarea name="content" rows="3" required placeholder="Wat wil je delen?"></textarea>
         </div>
-        <button class="btn btn-primary" type="submit">Post</button>
+        <button type="submit">Post</button>
     </form>
 <?php endif; ?>
 
 <?php if (!$posts): ?>
-    <p class="text-muted bg-dark text-white py-3">Nog geen posts.</p>
+    <p class="text-muted">Nog geen posts.</p>
 <?php endif; ?>
 
 <?php foreach ($posts as $post): ?>
@@ -137,28 +137,30 @@ $posts = $stmt->fetchAll();
         $hasLiked = (bool)$stmt->fetchColumn();
     }
     ?>
-    <div class="card mb-3 bg-dark text-white py-3">
-        <div class="card-body bg-dark text-white py-3">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <strong><?= e($post['username']) ?></strong>
-                    <span class="text-muted">• <?= e($post['created_at']) ?></span>
+    <div class="post">
+        <div class="post-vote">
+            <span><?= (int)$post['like_count'] ?></span>
+        </div>
+        <div class="post-content-wrapper">
+            <div class="post-header">
+                <div class="post-meta">
+                    <span><strong><?= e($post['username']) ?></strong></span>
+                    <span><?= e($post['created_at']) ?></span>
                 </div>
-                <a class="btn btn-sm btn-link" href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">Open</a>
             </div>
 
-            <p class="mt-3 mb-3"><?= nl2br(e($post['content'])) ?></p>
+            <div class="post-content"><?= nl2br(e($post['content'])) ?></div>
 
-            <div class="d-flex align-items-center">
-                <form method="post" action="<?= e(url('/index.php')) ?>" class="mr-2">
+            <div class="post-footer">
+                <form method="post" action="<?= e(url('/index.php')) ?>" style="display: inline;">
                     <input type="hidden" name="action" value="like_toggle">
                     <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
-                    <button class="btn btn-sm <?= $hasLiked ? 'btn-secondary' : 'btn-outline-secondary' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>
-                        <?= $hasLiked ? 'Unlike' : 'Like' ?> (<?= (int)$post['like_count'] ?>)
+                    <button type="submit" <?= $user ? '' : 'disabled' ?>>
+                        <?= $hasLiked ? 'Unlike' : 'Like' ?>
                     </button>
                 </form>
 
-                <a class="btn btn-sm btn-outline-secondary" href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">
+                <a href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">
                     Comments (<?= (int)$post['comment_count'] ?>)
                 </a>
             </div>
