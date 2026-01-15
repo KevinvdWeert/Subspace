@@ -353,10 +353,6 @@ form p {
     margin-bottom: 0;
 }
 
-form > div {
-    margin-bottom: 0;
-}
-
 /* Posts - Reddit Card Style */
 .post {
     background-color: var(--bg-card);
