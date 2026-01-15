@@ -94,7 +94,11 @@ require_once __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <h1>Feed</h1>
+=======
+<h1 class="m-0 text-white py-3">Feed</h1>
+>>>>>>> Stashed changes
 =======
 <h1 class="m-0 text-white py-3">Feed</h1>
 >>>>>>> Stashed changes
@@ -115,7 +119,11 @@ $posts = $stmt->fetchAll();
 
 <?php if (!$user): ?>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <div class="message">
+=======
+    <div class="alert alert-info text-white py-3">
+>>>>>>> Stashed changes
 =======
     <div class="alert alert-info text-white py-3">
 >>>>>>> Stashed changes
@@ -124,7 +132,11 @@ $posts = $stmt->fetchAll();
 <?php else: ?>
     <?php require_not_blocked(); ?>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <form method="post" action="<?= e(url('/index.php')) ?>">
+=======
+    <form method="post" action="<?= e(url('/index.php')) ?>" class="card card-body">
+>>>>>>> Stashed changes
 =======
     <form method="post" action="<?= e(url('/index.php')) ?>" class="card card-body">
 >>>>>>> Stashed changes
@@ -138,7 +150,11 @@ $posts = $stmt->fetchAll();
 
 <?php if (!$posts): ?>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <p class="text-muted">Nog geen posts.</p>
+=======
+    <p class="text-muted text-white py-3">Nog geen posts.</p>
+>>>>>>> Stashed changes
 =======
     <p class="text-muted text-white py-3">Nog geen posts.</p>
 >>>>>>> Stashed changes
@@ -154,6 +170,7 @@ $posts = $stmt->fetchAll();
     }
     ?>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <div class="post">
         <div class="post-vote">
             <span><?= (int)$post['like_count'] ?></span>
@@ -164,6 +181,8 @@ $posts = $stmt->fetchAll();
                     <span><strong><?= e($post['username']) ?></strong></span>
                     <span><?= e($post['created_at']) ?></span>
 =======
+=======
+>>>>>>> Stashed changes
     <div class="card mb-3 text-white py-3">
         <div class="card-body text-white py-3">
             <div class="d-flex justify-content-between">
