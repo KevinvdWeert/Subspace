@@ -17,38 +17,32 @@ $user = current_user();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subspace</title>
     <link rel="stylesheet" href="<?= e(url('/assets/css/style.css')) ?>">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-white py-3">
-    <a class="navbar-brand" href="<?= e(url('/index.php')) ?>">Subspace</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item"><a class="nav-link" href="<?= e(url('/index.php')) ?>">Feed</a></li>
-            <?php if ($user): ?>
-                <li class="nav-item"><a class="nav-link" href="<?= e(url('/profile.php')) ?>">Profiel</a></li>
-                <?php if (($user['role'] ?? '') === 'admin'): ?>
-                    <li class="nav-item"><a class="nav-link" href="<?= e(url('/admin/index.php')) ?>">Admin</a></li>
-                <?php endif; ?>
+<nav>
+    <ul>
+        <li><a href="<?= e(url('/index.php')) ?>"><strong>Subspace</strong></a></li>
+        <li><a href="<?= e(url('/index.php')) ?>">Feed</a></li>
+        <?php if ($user): ?>
+            <li><a href="<?= e(url('/profile.php')) ?>">Profiel</a></li>
+            <?php if (($user['role'] ?? '') === 'admin'): ?>
+                <li><a href="<?= e(url('/admin/index.php')) ?>">Admin</a></li>
             <?php endif; ?>
-        </ul>
-
-        <ul class="navbar-nav">
+        <?php endif; ?>
+        <li style="margin-left: auto;">
             <?php if ($user): ?>
-                <li class="nav-item"><span class="navbar-text mr-3">Ingelogd als <?= e($user['username'] ?? '') ?></span></li>
-                <li class="nav-item"><a class="nav-link" href="<?= e(url('/logout.php')) ?>">Logout</a></li>
-            <?php else: ?>
-                <li class="nav-item"><a class="nav-link" href="<?= e(url('/login.php')) ?>">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="<?= e(url('/register.php')) ?>">Registreren</a></li>
+                <span style="color: var(--text-muted); padding: 0 16px;">Ingelogd als <?= e($user['username'] ?? '') ?></span>
             <?php endif; ?>
-        </ul>
-    </div>
+        </li>
+        <?php if ($user): ?>
+            <li><a href="<?= e(url('/logout.php')) ?>">Logout</a></li>
+        <?php else: ?>
+            <li><a href="<?= e(url('/login.php')) ?>">Login</a></li>
+            <li><a href="<?= e(url('/register.php')) ?>">Registreren</a></li>
+        <?php endif; ?>
+    </ul>
 </nav>
 
-<div class="container mt-4">
+<main>
     

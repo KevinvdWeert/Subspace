@@ -27,32 +27,35 @@ $blocked = (int)$pdo->query(
 )->fetchColumn();
 ?>
 
-<h1 class="mb-4">Admin dashboard</h1>
+<h1>Admin dashboard</h1>
 
-<div class="row">
-    <div class="col-md-3 mb-3">
-        <div class="card"><div class="card-body"><div class="text-muted">Users</div><div class="h3 mb-0"><?= $users ?></div></div></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px;">
+    <div class="card">
+        <p class="text-muted">Users</p>
+        <h3><?= $users ?></h3>
     </div>
-    <div class="col-md-3 mb-3">
-        <div class="card"><div class="card-body"><div class="text-muted">Posts</div><div class="h3 mb-0"><?= $posts ?></div></div></div>
+    <div class="card">
+        <p class="text-muted">Posts</p>
+        <h3><?= $posts ?></h3>
     </div>
-    <div class="col-md-3 mb-3">
-        <div class="card"><div class="card-body"><div class="text-muted">Comments</div><div class="h3 mb-0"><?= $comments ?></div></div></div>
+    <div class="card">
+        <p class="text-muted">Comments</p>
+        <h3><?= $comments ?></h3>
     </div>
-    <div class="col-md-3 mb-3">
-        <div class="card"><div class="card-body"><div class="text-muted">Likes</div><div class="h3 mb-0"><?= $likes ?></div></div></div>
+    <div class="card">
+        <p class="text-muted">Likes</p>
+        <h3><?= $likes ?></h3>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-3 mb-3">
-        <div class="card"><div class="card-body"><div class="text-muted">Blocked users</div><div class="h3 mb-0"><?= $blocked ?></div></div></div>
-    </div>
+<div class="card">
+    <p class="text-muted">Blocked users</p>
+    <h3><?= $blocked ?></h3>
 </div>
 
-<div class="mt-4">
-    <a class="btn btn-outline-primary" href="<?= e(url('/admin/posts.php')) ?>">Moderatie: posts</a>
-    <a class="btn btn-outline-primary" href="<?= e(url('/admin/users.php')) ?>">Users: blokkeren</a>
+<div style="margin-top: 20px;">
+    <a href="<?= e(url('/admin/posts.php')) ?>">Moderatie: posts</a>
+    <a href="<?= e(url('/admin/users.php')) ?>">Users: blokkeren</a>
 </div>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

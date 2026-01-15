@@ -64,7 +64,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 require_once __DIR__ . '/../includes/header.php';
 
 if (isset($_GET['err']) && $_GET['err'] === 'self') {
-    echo '<div class="alert alert-danger" role="alert">' . e('Je kunt jezelf niet blokkeren.') . '</div>';
+    echo '<div class="error">' . e('Je kunt jezelf niet blokkeren.') . '</div>';
 }
 
 $stmt = $pdo->query(
@@ -85,9 +85,9 @@ $blockedUserIds = array_flip(array_map('intval', $activeBlocksStmt->fetchAll(PDO
 
 ?>
 
-<h1 class="mb-4">Users — Blokkeren</h1>
+<h1>Users — Blokkeren</h1>
 
-<table class="table table-sm table-striped">
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -111,19 +111,19 @@ $blockedUserIds = array_flip(array_map('intval', $activeBlocksStmt->fetchAll(PDO
                 <td><?= e($u['role']) ?></td>
                 <td>
                     <?php if ($isBlocked): ?>
-                        <span class="badge badge-warning">Blocked</span>
+                        <span style="color: var(--reddit-orange);">Blocked</span>
                     <?php else: ?>
-                        <span class="badge badge-success">Active</span>
+                        <span style="color: #46d169;">Active</span>
                     <?php endif; ?>
                 </td>
                 <td>
                     <?php if ($uid === $currentId): ?>
                         <span class="text-muted">(jij)</span>
                     <?php else: ?>
-                        <form method="post" action="<?= e(url('/admin/users.php')) ?>" class="d-inline">
+                        <form method="post" action="<?= e(url('/admin/users.php')) ?>" style="display: inline;">
                             <input type="hidden" name="action" value="toggle_block">
                             <input type="hidden" name="user_id" value="<?= $uid ?>">
-                            <button class="btn btn-sm btn-outline-secondary" type="submit">
+                            <button type="submit" class="secondary">
                                 <?= $isBlocked ? 'Unblock' : 'Block' ?>
                             </button>
                         </form>

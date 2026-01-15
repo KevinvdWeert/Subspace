@@ -41,9 +41,9 @@ $stmt = $pdo->query(
 $posts = $stmt->fetchAll();
 ?>
 
-<h1 class="mb-4">Moderatie — Posts</h1>
+<h1>Moderatie — Posts</h1>
 
-<table class="table table-sm table-striped">
+<table>
     <thead>
         <tr>
             <th>ID</th>
@@ -61,17 +61,17 @@ $posts = $stmt->fetchAll();
                 <td><?= e(mb_strimwidth((string)$post['content'], 0, 80, '…', 'UTF-8')) ?></td>
                 <td>
                     <?php if ((int)$post['is_hidden'] === 1): ?>
-                        <span class="badge badge-warning">Hidden</span>
+                        <span style="color: var(--reddit-orange);">Hidden</span>
                     <?php else: ?>
-                        <span class="badge badge-success">Visible</span>
+                        <span style="color: #46d169;">Visible</span>
                     <?php endif; ?>
                 </td>
                 <td>
-                    <a class="btn btn-sm btn-link" href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">Open</a>
-                    <form method="post" action="<?= e(url('/admin/posts.php')) ?>" class="d-inline">
+                    <a href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">Open</a>
+                    <form method="post" action="<?= e(url('/admin/posts.php')) ?>" style="display: inline;">
                         <input type="hidden" name="action" value="toggle_hide">
                         <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
-                        <button class="btn btn-sm btn-outline-secondary" type="submit">
+                        <button type="submit" class="secondary">
                             <?= ((int)$post['is_hidden'] === 1) ? 'Unhide' : 'Hide' ?>
                         </button>
                     </form>

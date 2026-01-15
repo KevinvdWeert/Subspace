@@ -53,24 +53,24 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-<h1 class="mb-4">Login</h1>
+<h1>Login</h1>
 
-<form method="post" action="<?= e(url('/login.php')) ?>" class="card card-body">
-    <div class="form-group">
+<form method="post" action="<?= e(url('/login.php')) ?>">
+    <div>
         <label for="login">Username of e-mail</label>
-        <input id="login" name="login" class="form-control" required value="<?= e($old['login'] ?? '') ?>">
-        <?php if (!empty($errors['login'])): ?><small class="text-danger"><?= e($errors['login']) ?></small><?php endif; ?>
+        <input id="login" name="login" type="text" required value="<?= e($old['login'] ?? '') ?>">
+        <?php if (!empty($errors['login'])): ?><small class="error"><?= e($errors['login']) ?></small><?php endif; ?>
     </div>
 
-    <div class="form-group">
+    <div>
         <label for="password">Wachtwoord</label>
-        <input id="password" name="password" type="password" class="form-control" required>
-        <?php if (!empty($errors['password'])): ?><small class="text-danger"><?= e($errors['password']) ?></small><?php endif; ?>
+        <input id="password" name="password" type="password" required>
+        <?php if (!empty($errors['password'])): ?><small class="error"><?= e($errors['password']) ?></small><?php endif; ?>
     </div>
 
-    <button class="btn btn-primary" type="submit">Inloggen</button>
+    <button type="submit">Inloggen</button>
 
-    <p class="mt-3 mb-0">
+    <p>
         Nog geen account? <a href="<?= e(url('/register.php')) ?>">Registreren</a>
     </p>
 </form>

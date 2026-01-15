@@ -86,36 +86,36 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-<h1 class="mb-4">Registreren</h1>
+<h1>Registreren</h1>
 
-<form method="post" action="<?= e(url('/register.php')) ?>" class="card card-body">
-    <div class="form-group">
+<form method="post" action="<?= e(url('/register.php')) ?>">
+    <div>
         <label for="username">Username</label>
-        <input id="username" name="username" class="form-control" required value="<?= e($old['username'] ?? '') ?>">
-        <?php if (!empty($errors['username'])): ?><small class="text-danger"><?= e($errors['username']) ?></small><?php endif; ?>
+        <input id="username" name="username" type="text" required value="<?= e($old['username'] ?? '') ?>">
+        <?php if (!empty($errors['username'])): ?><small class="error"><?= e($errors['username']) ?></small><?php endif; ?>
     </div>
 
-    <div class="form-group">
+    <div>
         <label for="email">E-mail</label>
-        <input id="email" name="email" type="email" class="form-control" required value="<?= e($old['email'] ?? '') ?>">
-        <?php if (!empty($errors['email'])): ?><small class="text-danger"><?= e($errors['email']) ?></small><?php endif; ?>
+        <input id="email" name="email" type="email" required value="<?= e($old['email'] ?? '') ?>">
+        <?php if (!empty($errors['email'])): ?><small class="error"><?= e($errors['email']) ?></small><?php endif; ?>
     </div>
 
-    <div class="form-group">
+    <div>
         <label for="password">Wachtwoord</label>
-        <input id="password" name="password" type="password" class="form-control" required>
-        <?php if (!empty($errors['password'])): ?><small class="text-danger"><?= e($errors['password']) ?></small><?php endif; ?>
+        <input id="password" name="password" type="password" required>
+        <?php if (!empty($errors['password'])): ?><small class="error"><?= e($errors['password']) ?></small><?php endif; ?>
     </div>
 
-    <div class="form-group">
+    <div>
         <label for="password_confirm">Wachtwoord herhalen</label>
-        <input id="password_confirm" name="password_confirm" type="password" class="form-control" required>
-        <?php if (!empty($errors['password_confirm'])): ?><small class="text-danger"><?= e($errors['password_confirm']) ?></small><?php endif; ?>
+        <input id="password_confirm" name="password_confirm" type="password" required>
+        <?php if (!empty($errors['password_confirm'])): ?><small class="error"><?= e($errors['password_confirm']) ?></small><?php endif; ?>
     </div>
 
-    <button class="btn btn-primary" type="submit">Account maken</button>
+    <button type="submit">Account maken</button>
 
-    <p class="mt-3 mb-0">
+    <p>
         Heb je al een account? <a href="<?= e(url('/login.php')) ?>">Login</a>
     </p>
 </form>

@@ -84,7 +84,7 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
 <?php if ($notice): ?>
-    <div class="alert alert-<?= e($notice['type']) ?>" role="alert">
+    <div class="<?= e($notice['type'] === 'success' ? 'success' : 'error') ?>">
         <?= e($notice['message']) ?>
     </div>
 <?php endif; ?>
@@ -140,60 +140,61 @@ if ($user) {
 }
 ?>
 
-<a class="btn btn-link px-0" href="<?= e(url('/index.php')) ?>">&larr; Terug naar feed</a>
+<a href="<?= e(url('/index.php')) ?>">&larr; Terug naar feed</a>
 
-<div class="card mb-3">
-    <div class="card-body">
-        <div class="d-flex justify-content-between">
-            <div>
-                <strong><?= e($post['username']) ?></strong>
-                <span class="text-muted">• <?= e($post['created_at']) ?></span>
+<div class="post">
+    <div class="post-vote">
+        <span><?= $likeCount ?></span>
+    </div>
+    <div class="post-content-wrapper">
+        <div class="post-header">
+            <div class="post-meta">
+                <span><strong><?= e($post['username']) ?></strong></span>
+                <span><?= e($post['created_at']) ?></span>
+                <?php if ((int)$post['is_hidden'] === 1): ?>
+                    <span class="error">Hidden</span>
+                <?php endif; ?>
             </div>
-            <?php if ((int)$post['is_hidden'] === 1): ?>
-                <span class="badge badge-warning">Hidden</span>
-            <?php endif; ?>
         </div>
 
-        <p class="mt-3 mb-3"><?= nl2br(e($post['content'])) ?></p>
+        <div class="post-content"><?= nl2br(e($post['content'])) ?></div>
 
-        <div class="d-flex align-items-center">
-            <form method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>" class="mr-2">
+        <div class="post-footer">
+            <form method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>" style="display: inline;">
                 <input type="hidden" name="action" value="like_toggle">
                 <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
-                <button class="btn btn-sm <?= $hasLiked ? 'btn-secondary' : 'btn-outline-secondary' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>
-                    <?= $hasLiked ? 'Unlike' : 'Like' ?> (<?= $likeCount ?>)
+                <button type="submit" <?= $user ? '' : 'disabled' ?>>
+                    <?= $hasLiked ? 'Unlike' : 'Like' ?>
                 </button>
             </form>
         </div>
     </div>
 </div>
 
-<h2 class="h5">Comments (<?= count($comments) ?>)</h2>
+<h2>Comments (<?= count($comments) ?>)</h2>
 
 <?php if ($user): ?>
     <?php require_not_blocked(); ?>
-    <form method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>" class="card card-body mb-3">
+    <form method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">
         <input type="hidden" name="action" value="comment_create">
         <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
-        <textarea name="content" class="form-control mb-2" rows="3" required placeholder="Plaats een reactie..."></textarea>
-        <button class="btn btn-primary btn-sm" type="submit">Plaats reactie</button>
+        <textarea name="content" rows="3" required placeholder="Plaats een reactie..."></textarea>
+        <button type="submit">Plaats reactie</button>
     </form>
 <?php else: ?>
-    <div class="alert alert-info">Login om te reageren.</div>
+    <div class="message">Login om te reageren.</div>
 <?php endif; ?>
 
 <?php foreach ($comments as $comment): ?>
-    <div class="card mb-2">
-        <div class="card-body py-2">
-            <div class="d-flex justify-content-between">
-                <small><strong><?= e($comment['username']) ?></strong></small>
-                <small class="text-muted"><?= e($comment['created_at']) ?></small>
-            </div>
+    <div class="card">
+        <div class="post-meta">
+            <strong><?= e($comment['username']) ?></strong>
+            <span class="text-muted"><?= e($comment['created_at']) ?></span>
             <?php if ((int)$comment['is_hidden'] === 1): ?>
-                <div><span class="badge badge-warning">Hidden</span></div>
+                <span class="error">Hidden</span>
             <?php endif; ?>
-            <div><?= nl2br(e($comment['content'])) ?></div>
         </div>
+        <p><?= nl2br(e($comment['content'])) ?></p>
     </div>
 <?php endforeach; ?>
 
