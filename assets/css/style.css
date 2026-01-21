@@ -4,9 +4,9 @@
     --bg-secondary: #1a1a1b;
     --bg-card: #1a1a1b;
     --bg-hover: #272729;
-    --text-primary: #d7dadc;
-    --text-secondary: #818384;
-    --text-muted: #818384;
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
+    --text-muted: #dadada;
     --border-color: #343536;
     --link-color: #4fbcff;
     --link-hover: #6fa8dc;
@@ -196,7 +196,7 @@ a:hover {
 form {
     background-color: var(--bg-card);
     border-radius: 4px;
-    border: 1px solid var(--border-color);
+    /* border: 1px solid var(--border-color); */
     padding: 10px;
 }
 
