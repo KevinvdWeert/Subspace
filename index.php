@@ -108,12 +108,6 @@ $stmt = $pdo->query(
 );
 $posts = $stmt->fetchAll();
 ?>
-
-<?php if (!$user): ?>
-    <div class="message">
-        Je bent niet ingelogd. <a href="<?= e(url('/login.php')) ?>">Login</a> of <a href="<?= e(url('/register.php')) ?>">registreer</a> om te posten.
-    </div>
-<?php else: ?>
     <?php require_not_blocked(); ?>
     <form method="post" action="<?= e(url('/index.php')) ?>">
         <input type="hidden" name="action" value="post_create">
@@ -122,7 +116,6 @@ $posts = $stmt->fetchAll();
         </div>
         <button type="submit">Post</button>
     </form>
-<?php endif; ?>
 
 <?php if (!$posts): ?>
     <p class="text-muted">Nog geen posts.</p>
