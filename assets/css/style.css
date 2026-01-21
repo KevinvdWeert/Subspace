@@ -13,7 +13,7 @@
     --reddit-orange: #ff4500;
     --reddit-orange-hover: #ff5414;
     --button-bg: #d93a00;
-    --button-hover: #1484d6;
+    --button-hover: var(--reddit-orange-hover);
     --button-secondary: #272729;
     --button-secondary-hover: #323234;
     --input-bg: #242424;
@@ -28,7 +28,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    color: white !important;
 }
 
 body {
@@ -38,6 +37,30 @@ body {
     font-size: 14px;
     line-height: 1.5;
     min-height: 100vh;
+}
+
+/* Base typography spacing */
+p {
+    margin: 0 0 12px;
+    color: var(--text-secondary);
+}
+
+main > *:last-child {
+    margin-bottom: 0;
+}
+
+main > * + * {
+    margin-top: 12px;
+}
+
+ul,
+ol {
+    margin: 0 0 12px;
+    padding-left: 20px;
+}
+
+li {
+    color: var(--text-secondary);
 }
 
 /* Sidebar Layout */
@@ -246,7 +269,21 @@ input[type="submit"],
 button:hover,
 input[type="submit"]:hover,
 .btn:hover {
-    background-color: var(--button-hover);
+    background-color: var(--reddit-orange-hover);
+}
+
+button:focus-visible,
+input[type="submit"]:focus-visible,
+.btn:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--link-color);
+    outline-offset: 2px;
+}
+
+button:disabled,
+input[type="submit"]:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
 }
 
 button.secondary,
@@ -313,6 +350,20 @@ button.secondary:hover,
 .card p:last-child {
     margin-bottom: 0;
     padding-bottom: 16px;
+}
+
+.card ul,
+.card ol {
+    padding: 0 16px 16px;
+    padding-left: 36px;
+}
+
+.card li {
+    margin-bottom: 6px;
+}
+
+.card li:last-child {
+    margin-bottom: 0;
 }
 
 /* Tables - Reddit Style */
@@ -633,48 +684,4 @@ footer a:hover {
 
 .create-post-btn:hover {
     background-color: var(--reddit-orange-hover);
-}
-
-.layout, body, .alert, .card {
-    background-color: var(--bg-primary) !important;
-    margin: 0 !important;
-}
-
-.card {
-    border-color: var(--border-color) !important;
-    color: white !important;
-}
-
-button[type="submit"], .btn {
-    background-color: var(--reddit-orange) !important;
-    color: white !important;
-    border: none !important;
-}
-
-input, textarea, select {
-    background-color: var(--bg-secondary) !important;
-    color: white !important;
-    border: 1px solid var(--border-color) !important;
-}
-
-.container, body, .alert, .card, nav, footer {
-    background-color: var(--bg-primary) !important;
-    margin: 0 !important;
-}
-
-.card {
-    border-color: var(--border-color) !important;
-    color: white !important;
-}
-
-button[type="submit"], .btn {
-    background-color: var(--reddit-orange) !important;
-    color: white !important;
-    border: none !important;
-}
-
-input, textarea, select {
-    background-color: var(--bg-secondary) !important;
-    color: white !important;
-    border: 1px solid var(--border-color) !important;
 }
