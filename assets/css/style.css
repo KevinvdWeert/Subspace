@@ -262,23 +262,6 @@ button.secondary:hover,
     border-color: var(--text-secondary);
 }
 
-/* Reddit Upvote/Downvote Style Buttons */
-.vote-btn {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    padding: 4px;
-    min-width: auto;
-    height: auto;
-    border-radius: 2px;
-    cursor: pointer;
-}
-
-.vote-btn:hover {
-    background-color: var(--bg-hover);
-    color: var(--text-primary);
-}
-
 /* Cards - Reddit Post Style */
 .card {
     background-color: var(--bg-card);
@@ -645,12 +628,6 @@ footer a:hover {
     color: white !important;
 }
 
-button[type="submit"], .btn {
-    background-color: var(--reddit-orange) !important;
-    color: white !important;
-    border: none !important;
-}
-
 input, textarea, select {
     background-color: var(--bg-secondary) !important;
     color: white !important;
@@ -667,10 +644,55 @@ input, textarea, select {
     color: white !important;
 }
 
-button[type="submit"], .btn {
+button[type="submit"], .btn:not(.like-btn) {
     background-color: var(--reddit-orange) !important;
     color: white !important;
     border: none !important;
+}
+
+.vote-btn {
+    background: none !important;
+    border: none !important;
+    color: var(--text-secondary) !important;
+    font-size: 20px !important;
+    cursor: pointer !important;
+    padding: 2px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    height: 24px !important;
+    transition: color 0.2s, background-color 0.2s !important;
+    border-radius: 2px !important;
+    min-width: auto !important;
+}
+
+.vote-btn:hover:not(:disabled) {
+    background-color: var(--bg-hover) !important;
+}
+
+.vote-btn.upvote:hover:not(:disabled) {
+    color: var(--reddit-orange) !important;
+}
+
+.vote-btn.upvote.voted {
+    color: var(--reddit-orange) !important;
+}
+
+.vote-btn.downvote:hover:not(:disabled) {
+    color: var(--downvote) !important;
+}
+
+.vote-btn:disabled {
+    cursor: not-allowed !important;
+    opacity: 0.3 !important;
+}
+
+.vote-count {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    color: var(--text-primary) !important;
+    line-height: 1 !important;
 }
 
 input, textarea, select {

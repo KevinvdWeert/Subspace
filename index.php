@@ -123,7 +123,7 @@ $posts = $stmt->fetchAll();
 
 <?php foreach ($posts as $post): ?>
     <?php
-    $hasLiked = false;
+    $likeCount = false;
     if ($user) {
         $stmt = $pdo->prepare('SELECT 1 FROM post_likes WHERE post_id = :post_id AND user_id = :user_id');
         $stmt->execute([':post_id' => (int)$post['id'], ':user_id' => (int)$user['id']]);
@@ -132,7 +132,17 @@ $posts = $stmt->fetchAll();
     ?>
     <div class="post">
         <div class="post-vote">
-            <span><?= (int)$post['like_count'] ?></span>
+            <form method="post" action="<?= e(url('/index.php')) ?>" style="display: inline;">
+                <input type="hidden" name="action" value="like_toggle">
+                <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
+                <button class="vote-btn upvote <?= $hasLiked ? 'voted' : '' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>
+                    ▲
+                </button>
+            </form>
+            <span class="vote-count"><?= (int)$post['like_count'] ?></span>
+            <button class="vote-btn downvote" disabled>
+                ▼
+            </button>
         </div>
         <div class="post-content-wrapper">
             <div class="post-header">
@@ -145,16 +155,8 @@ $posts = $stmt->fetchAll();
             <div class="post-content"><?= nl2br(e($post['content'])) ?></div>
 
             <div class="post-footer">
-                <form method="post" action="<?= e(url('/index.php')) ?>" style="display: inline;">
-                    <input type="hidden" name="action" value="like_toggle">
-                    <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
-                    <button type="submit" <?= $user ? '' : 'disabled' ?>>
-                        <?= $hasLiked ? 'Unlike' : 'Like' ?>
-                    </button>
-                </form>
-
                 <a href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">
-                    Comments (<?= (int)$post['comment_count'] ?>)
+                    💬 <?= (int)$post['comment_count'] ?> Comments
                 </a>
             </div>
         </div>

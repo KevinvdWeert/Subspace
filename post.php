@@ -163,8 +163,8 @@ if ($user) {
             <form method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>" style="display: inline;">
                 <input type="hidden" name="action" value="like_toggle">
                 <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
-                <button type="submit" <?= $user ? '' : 'disabled' ?>>
-                    <?= $hasLiked ? 'Unlike' : 'Like' ?>
+                <button class="like-btn <?= $hasLiked ? 'liked' : '' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>
+                    <?= $likeCount ?>
                 </button>
             </form>
         </div>
