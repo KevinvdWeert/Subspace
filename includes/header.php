@@ -8,49 +8,92 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 $user = current_user();
+
+$currentPath = strtolower((string)($_SERVER['SCRIPT_NAME'] ?? ''));
+$isActive = static function (string $path) use ($currentPath): string {
+    $path = strtolower($path);
+    if ($path !== '' && $path[0] !== '/') {
+        $path = '/' . $path;
+    }
+
+    return str_ends_with($currentPath, $path) ? 'active' : '';
+};
+$isAdminSection = str_starts_with($currentPath, '/admin/');
+
+// Lightweight spaces list for navigation.
+try {
+    $navSpaces = get_spaces(200, 0, is_admin());
+} catch (Throwable $e) {
+    $navSpaces = [];
+}
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subspace</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="<?= e(url('/assets/css/style.css')) ?>">
 </head>
 
 <body>
-<div class="layout-wrapper">
-<nav>
-    <a class="navbar-brand" href="<?= e(url('/index.php')) ?>">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="reddit-logo">
-            <g>
-                <circle fill="#FF4500" cx="10" cy="10" r="10"></circle>
-                <path fill="#FFF" d="M16.67,10A1.46,1.46,0,0,0,14.2,9a7.12,7.12,0,0,0-3.85-1.23L11,4.65,13.14,5.1a1,1,0,1,0,.13-0.61L10.82,4a0.31,0.31,0,0,0-.37.24L9.71,7.71a7.14,7.14,0,0,0-3.9,1.23A1.46,1.46,0,1,0,4.2,11.33a2.87,2.87,0,0,0,0,.44c0,2.24,2.61,4.06,5.83,4.06s5.83-1.82,5.83-4.06a2.87,2.87,0,0,0,0-.44A1.46,1.46,0,0,0,16.67,10Zm-10,1a1,1,0,1,1,1,1A1,1,0,0,1,6.67,11Zm5.81,2.75a3.84,3.84,0,0,1-2.47.77,3.84,3.84,0,0,1-2.47-.77,0.27,0.27,0,0,1,.38-0.38A3.27,3.27,0,0,0,10,14a3.28,3.28,0,0,0,2.09-.61A0.27,0.27,0,1,1,12.48,13.79Zm-0.18-1.71a1,1,0,1,1,1-1A1,1,0,0,1,12.29,12.08Z"></path>
-            </g>
-        </svg>
-        <span class="reddit-text">Subspace</span>
-    </a>
+<div class="d-flex min-vh-100">
+    <aside class="d-flex flex-column flex-shrink-0 p-3 border-end bg-body-tertiary subspace-sidebar">
+        <a class="d-flex align-items-center gap-2 mb-3 text-decoration-none" href="<?= e(url('/index.php')) ?>" aria-label="Subspace home">
+            <span class="brand-mark" aria-hidden="true">S</span>
+            <span class="brand-text">SUBSPACE</span>
+        </a>
 
-    <ul>
-        <li><a href="<?= e(url('/index.php')) ?>">Home</a></li>
-        <li><a href="<?= e(url('/space.php')) ?>">Spaces</a></li>
-        <?php if ($user): ?>
-            <li><a href="<?= e(url('/profile.php')) ?>">Profiel</a></li>
-            <?php if (($user['role'] ?? '') === 'admin'): ?>
-                <li><a href="<?= e(url('/admin/index.php')) ?>">Admin</a></li>
+        <ul class="nav nav-pills flex-column gap-1 mb-3">
+            <li class="nav-item">
+                <a class="nav-link <?= e($isActive('index.php')) ?>" href="<?= e(url('/index.php')) ?>">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link <?= e($isActive('space.php')) ?>" href="<?= e(url('/space.php')) ?>">Spaces</a>
+            </li>
+            <?php if ($user): ?>
+                <li class="nav-item">
+                    <a class="nav-link <?= e($isActive('profile.php')) ?>" href="<?= e(url('/profile.php')) ?>">profiel</a>
+                </li>
+                <?php if (($user['role'] ?? '') === 'admin'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link <?= $isAdminSection ? 'active' : '' ?>" href="<?= e(url('/admin/index.php')) ?>">Admin</a>
+                    </li>
+                <?php endif; ?>
             <?php endif; ?>
-        <?php endif; ?>
-        <?php if ($user): ?>
-            <li><a href="<?= e(url('/logout.php')) ?>">Logout</a></li>
-            <span style="color: var(--text-muted); padding: 0 16px;">Ingelogd als <?= e($user['username'] ?? '') ?></span>
-        </li>
-        <?php else: ?>
-            <li><a href="<?= e(url('/login.php')) ?>">Login</a></li>
-            <li><a href="<?= e(url('/register.php')) ?>">Registreren</a></li>
-        <?php endif; ?>
-    </ul>
-</nav>
-<div class="content-wrapper">
-<main>
+        </ul>
+
+        <div class="text-uppercase small fw-semibold text-secondary mb-2">Spaces</div>
+        <div class="nav flex-column small gap-1 subspace-nav-spaces">
+            <a class="nav-link px-0" href="<?= e(url('/space.php')) ?>">All Spaces</a>
+            <?php foreach ($navSpaces as $space): ?>
+                <a class="nav-link px-0" href="<?= e(url('/space.php?id=' . (int)$space['id'])) ?>">
+                    <?= e($space['title']) ?>
+                </a>
+            <?php endforeach; ?>
+            <?php if ($user): ?>
+                <a class="nav-link px-0 fw-semibold" href="<?= e(url('/space.php#new-space')) ?>">+ Create Space</a>
+            <?php endif; ?>
+        </div>
+
+        <div class="mt-auto pt-3 border-top">
+            <?php if ($user): ?>
+                <div class="small text-secondary">Signed in as</div>
+                <div class="mb-2">
+                    <a class="text-decoration-none" href="<?= e(url('/profile.php')) ?>"><?= e($user['username'] ?? '') ?></a>
+                </div>
+                <a class="btn btn-sm btn-outline-secondary w-100" href="<?= e(url('/logout.php')) ?>">Logout</a>
+            <?php else: ?>
+                <div class="d-grid gap-2">
+                    <a class="btn btn-sm btn-primary" href="<?= e(url('/login.php')) ?>">Login</a>
+                    <a class="btn btn-sm btn-outline-secondary" href="<?= e(url('/register.php')) ?>">Create account</a>
+                </div>
+            <?php endif; ?>
+        </div>
+    </aside>
+
+    <div class="flex-grow-1 d-flex flex-column">
+        <main class="container-fluid py-3 flex-grow-1">
     

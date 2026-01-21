@@ -43,7 +43,8 @@ $posts = $stmt->fetchAll();
 
 <h1>Moderatie — Posts</h1>
 
-<table>
+<div class="table-responsive">
+<table class="table table-striped align-middle">
     <thead>
         <tr>
             <th>ID</th>
@@ -61,17 +62,17 @@ $posts = $stmt->fetchAll();
                 <td><?= e(mb_strimwidth((string)$post['content'], 0, 80, '…', 'UTF-8')) ?></td>
                 <td>
                     <?php if ((int)$post['is_hidden'] === 1): ?>
-                        <span style="color: var(--reddit-orange);">Hidden</span>
+                        <span class="badge text-bg-danger">Hidden</span>
                     <?php else: ?>
-                        <span style="color: #46d169;">Visible</span>
+                        <span class="badge text-bg-success">Visible</span>
                     <?php endif; ?>
                 </td>
                 <td>
-                    <a href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">Open</a>
-                    <form method="post" action="<?= e(url('/admin/posts.php')) ?>" style="display: inline;">
+                    <a class="btn btn-sm btn-link px-0" href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">Open</a>
+                    <form method="post" action="<?= e(url('/admin/posts.php')) ?>" class="d-inline">
                         <input type="hidden" name="action" value="toggle_hide">
                         <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
-                        <button type="submit" class="secondary">
+                        <button type="submit" class="btn btn-sm btn-outline-secondary">
                             <?= ((int)$post['is_hidden'] === 1) ? 'Unhide' : 'Hide' ?>
                         </button>
                     </form>
@@ -80,5 +81,7 @@ $posts = $stmt->fetchAll();
         <?php endforeach; ?>
     </tbody>
 </table>
+
+</div>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

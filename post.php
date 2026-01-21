@@ -84,20 +84,21 @@ require_once __DIR__ . '/includes/header.php';
 ?>
 
 <?php if ($notice): ?>
-    <div class="<?= e($notice['type'] === 'success' ? 'success' : 'error') ?>">
-        <?= e($notice['message']) ?>
-    </div>
+    <div class="alert alert-<?= e($notice['type']) ?>" role="alert"><?= e($notice['message']) ?></div>
 <?php endif; ?>
 
 <?php
 
+$hasSpaceId = db_has_column('posts', 'space_id');
+$spaceIdSelect = $hasSpaceId ? 'p.space_id' : 'NULL AS space_id';
+
 $stmt = $pdo->prepare(
-    'SELECT p.id, p.content, p.created_at, p.is_hidden, p.space_id,
+    "SELECT p.id, p.content, p.media_url, p.created_at, p.is_hidden, {$spaceIdSelect},
             u.id AS user_id, u.username
      FROM posts p
      JOIN users u ON u.id = p.user_id
      WHERE p.id = :id
-     LIMIT 1'
+     LIMIT 1"
 );
 $stmt->execute([':id' => $postId]);
 $post = $stmt->fetch();
@@ -140,7 +141,7 @@ if ($user) {
 }
 ?>
 
-<a href="<?= e(url('/index.php')) ?>">&larr; Terug naar feed</a>
+<a class="btn btn-sm btn-link px-0 mb-2" href="<?= e(url('/index.php')) ?>">&larr; Terug naar feed</a>
 
 <?php if ((int)($post['space_id'] ?? 0) > 0): ?>
     <?php 
@@ -149,67 +150,77 @@ if ($user) {
     $space = $spaceStmt->fetch();
     ?>
     <?php if ($space): ?>
-        <div class="space-breadcrumb">
-            <a href="<?= e(url('/space.php?id=' . (int)$post['space_id'])) ?>">
+        <div class="alert alert-secondary py-2" role="alert">
+            <a class="text-decoration-none" href="<?= e(url('/space.php?id=' . (int)$post['space_id'])) ?>">
                 ← Terug naar <?= e($space['title']) ?>
             </a>
         </div>
     <?php endif; ?>
 <?php endif; ?>
 
-<div class="post">
-    <div class="post-vote">
-        <span><?= $likeCount ?></span>
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <div class="d-flex flex-wrap align-items-center gap-2 small text-secondary mb-2">
+            <a class="fw-semibold text-decoration-none" href="<?= e(url('/profile.php?u=' . urlencode((string)$post['username']))) ?>"><?= e($post['username']) ?></a>
+            <span>·</span>
+            <span><?= e($post['created_at']) ?></span>
+            <?php if ((int)$post['is_hidden'] === 1): ?>
+                <span class="badge text-bg-danger">Hidden</span>
+            <?php endif; ?>
+        </div>
+
+        <div class="mb-2"><?= nl2br(e($post['content'])) ?></div>
+
+        <?php if (!empty($post['media_url'])): ?>
+            <img class="post-image img-fluid rounded border" src="<?= e(url((string)$post['media_url'])) ?>" alt="" loading="lazy">
+        <?php endif; ?>
     </div>
-    <div class="post-content-wrapper">
-        <div class="post-header">
-            <div class="post-meta">
-                <span><strong><?= e($post['username']) ?></strong></span>
-                <span><?= e($post['created_at']) ?></span>
-                <?php if ((int)$post['is_hidden'] === 1): ?>
-                    <span class="error">Hidden</span>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <div class="post-content"><?= nl2br(e($post['content'])) ?></div>
-
-        <div class="post-footer">
-            <form method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>" style="display: inline;">
-                <input type="hidden" name="action" value="like_toggle">
-                <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
-                <button class="like-btn <?= $hasLiked ? 'liked' : '' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>
-                    <?= $likeCount ?>
-                </button>
-            </form>
-        </div>
+    <div class="card-footer bg-transparent d-flex align-items-center gap-2">
+        <form method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>" class="m-0">
+            <input type="hidden" name="action" value="like_toggle">
+            <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
+            <button class="btn btn-sm <?= $hasLiked ? 'btn-primary' : 'btn-outline-secondary' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>
+                ▲ Like (<?= $likeCount ?>)
+            </button>
+        </form>
+        <?php if (!$user): ?>
+            <span class="small text-secondary">Login to like.</span>
+        <?php endif; ?>
     </div>
 </div>
 
-<h2>Comments (<?= count($comments) ?>)</h2>
+<h2 class="h5 mb-3">Comments (<?= count($comments) ?>)</h2>
 
 <?php if ($user): ?>
     <?php require_not_blocked(); ?>
-    <form method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">
+    <form class="card shadow-sm mb-3" method="post" action="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">
         <input type="hidden" name="action" value="comment_create">
         <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
-        <textarea name="content" rows="3" required placeholder="Plaats een reactie..."></textarea>
-        <button type="submit">Plaats reactie</button>
+        <div class="card-body">
+            <label class="form-label" for="content">Plaats een reactie</label>
+            <textarea class="form-control" id="content" name="content" rows="3" required maxlength="2000" placeholder="Plaats een reactie..."></textarea>
+            <div class="d-flex justify-content-end mt-2">
+                <button class="btn btn-primary" type="submit">Plaats reactie</button>
+            </div>
+        </div>
     </form>
 <?php else: ?>
-    <div class="message">Login om te reageren.</div>
+    <div class="alert alert-secondary" role="alert">Login om te reageren.</div>
 <?php endif; ?>
 
 <?php foreach ($comments as $comment): ?>
-    <div class="card">
-        <div class="post-meta">
-            <strong><?= e($comment['username']) ?></strong>
-            <span class="text-muted"><?= e($comment['created_at']) ?></span>
-            <?php if ((int)$comment['is_hidden'] === 1): ?>
-                <span class="error">Hidden</span>
-            <?php endif; ?>
+    <div class="card shadow-sm mb-2">
+        <div class="card-body">
+            <div class="d-flex flex-wrap align-items-center gap-2 small text-secondary mb-2">
+                <a class="fw-semibold text-decoration-none" href="<?= e(url('/profile.php?u=' . urlencode((string)$comment['username']))) ?>"><?= e($comment['username']) ?></a>
+                <span>·</span>
+                <span><?= e($comment['created_at']) ?></span>
+                <?php if ((int)$comment['is_hidden'] === 1): ?>
+                    <span class="badge text-bg-danger">Hidden</span>
+                <?php endif; ?>
+            </div>
+            <div><?= nl2br(e($comment['content'])) ?></div>
         </div>
-        <p><?= nl2br(e($comment['content'])) ?></p>
     </div>
 <?php endforeach; ?>
 

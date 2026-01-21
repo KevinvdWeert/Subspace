@@ -86,38 +86,45 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 require_once __DIR__ . '/includes/header.php';
 ?>
 
-<h1>Registreren</h1>
+<div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h4 mb-3">Registreren</h1>
 
-<form method="post" action="<?= e(url('/register.php')) ?>">
-    <div>
-        <label for="username">Username</label>
-        <input id="username" name="username" type="text" required value="<?= e($old['username'] ?? '') ?>">
-        <?php if (!empty($errors['username'])): ?><small class="error"><?= e($errors['username']) ?></small><?php endif; ?>
+                <form method="post" action="<?= e(url('/register.php')) ?>" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label" for="username">Username</label>
+                        <input class="form-control <?= !empty($errors['username']) ? 'is-invalid' : '' ?>" id="username" name="username" type="text" required value="<?= e($old['username'] ?? '') ?>">
+                        <?php if (!empty($errors['username'])): ?><div class="invalid-feedback"><?= e($errors['username']) ?></div><?php endif; ?>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="email">E-mail</label>
+                        <input class="form-control <?= !empty($errors['email']) ? 'is-invalid' : '' ?>" id="email" name="email" type="email" required value="<?= e($old['email'] ?? '') ?>">
+                        <?php if (!empty($errors['email'])): ?><div class="invalid-feedback"><?= e($errors['email']) ?></div><?php endif; ?>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="password">Wachtwoord</label>
+                        <input class="form-control <?= !empty($errors['password']) ? 'is-invalid' : '' ?>" id="password" name="password" type="password" required>
+                        <?php if (!empty($errors['password'])): ?><div class="invalid-feedback"><?= e($errors['password']) ?></div><?php endif; ?>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="password_confirm">Wachtwoord herhalen</label>
+                        <input class="form-control <?= !empty($errors['password_confirm']) ? 'is-invalid' : '' ?>" id="password_confirm" name="password_confirm" type="password" required>
+                        <?php if (!empty($errors['password_confirm'])): ?><div class="invalid-feedback"><?= e($errors['password_confirm']) ?></div><?php endif; ?>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary" type="submit">Account maken</button>
+                        <a class="btn btn-outline-secondary" href="<?= e(url('/login.php')) ?>">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <div>
-        <label for="email">E-mail</label>
-        <input id="email" name="email" type="email" required value="<?= e($old['email'] ?? '') ?>">
-        <?php if (!empty($errors['email'])): ?><small class="error"><?= e($errors['email']) ?></small><?php endif; ?>
-    </div>
-
-    <div>
-        <label for="password">Wachtwoord</label>
-        <input id="password" name="password" type="password" required>
-        <?php if (!empty($errors['password'])): ?><small class="error"><?= e($errors['password']) ?></small><?php endif; ?>
-    </div>
-
-    <div>
-        <label for="password_confirm">Wachtwoord herhalen</label>
-        <input id="password_confirm" name="password_confirm" type="password" required>
-        <?php if (!empty($errors['password_confirm'])): ?><small class="error"><?= e($errors['password_confirm']) ?></small><?php endif; ?>
-    </div>
-
-    <button type="submit">Account maken</button>
-
-    <p>
-        Heb je al een account? <a href="<?= e(url('/login.php')) ?>">Login</a>
-    </p>
-</form>
+</div>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
