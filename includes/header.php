@@ -34,29 +34,22 @@ $user = current_user();
 
     <ul>
         <li><a href="<?= e(url('/index.php')) ?>">Home</a></li>
-
         <?php if ($user): ?>
             <li><a href="<?= e(url('/profile.php')) ?>">Profiel</a></li>
             <?php if (($user['role'] ?? '') === 'admin'): ?>
                 <li><a href="<?= e(url('/admin/index.php')) ?>">Admin</a></li>
             <?php endif; ?>
         <?php endif; ?>
-
-        <li style="margin-left: auto;">
-            <?php if ($user): ?>
-                <span style="color: var(--text-muted); padding: 0 16px;">Ingelogd als <?= e($user['username'] ?? '') ?></span>
-            <?php endif; ?>
-        </li>
-
         <?php if ($user): ?>
             <li><a href="<?= e(url('/logout.php')) ?>">Logout</a></li>
+            <span style="color: var(--text-muted); padding: 0 16px;">Ingelogd als <?= e($user['username'] ?? '') ?></span>
+        </li>
         <?php else: ?>
             <li><a href="<?= e(url('/login.php')) ?>">Login</a></li>
             <li><a href="<?= e(url('/register.php')) ?>">Registreren</a></li>
         <?php endif; ?>
     </ul>
 </nav>
-
 <div class="content-wrapper">
 <main>
     
