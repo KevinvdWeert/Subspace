@@ -1,0 +1,38 @@
+# PHP
+*.log
+*.tmp
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+/vendor/
+node_modules/
+
+# User uploads
+/assets/uploads/*
+!/assets/uploads/.gitkeep
+
+# Config (may contain secrets)
+# /includes/config.php
+
+# Build artifacts
+/dist/
+/build/
+
+# Logs
+/logs/
+*.log
+
+# Temp files
+/tmp/
+*.tmp
+*.cache
