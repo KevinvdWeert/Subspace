@@ -135,7 +135,7 @@ $posts = $stmt->fetchAll();
             <form method="post" action="<?= e(url('/index.php')) ?>" style="display: inline;">
                 <input type="hidden" name="action" value="like_toggle">
                 <input type="hidden" name="post_id" value="<?= (int)$post['id'] ?>">
-                <button class="vote-btn upvote <?= $hasLiked ? 'voted' : '' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>
+                <button style="padding: 0; border: none; background: none;" class="vote-btn upvote <?= $hasLiked ? 'voted' : '' ?>" type="submit" <?= $user ? '' : 'disabled' ?>>
                     ▲
                 </button>
             </form>
