@@ -68,6 +68,7 @@ nav {
     height: 100vh;
     display: flex;
     flex-direction: column;
+    position: sticky;
 }
 
 /* Reddit Logo Styling */
