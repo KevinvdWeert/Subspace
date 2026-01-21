@@ -34,6 +34,7 @@ $user = current_user();
 
     <ul>
         <li><a href="<?= e(url('/index.php')) ?>">Home</a></li>
+        <li><a href="<?= e(url('/space.php')) ?>">Spaces</a></li>
         <?php if ($user): ?>
             <li><a href="<?= e(url('/profile.php')) ?>">Profiel</a></li>
             <?php if (($user['role'] ?? '') === 'admin'): ?>

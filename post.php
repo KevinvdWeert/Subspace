@@ -92,7 +92,7 @@ require_once __DIR__ . '/includes/header.php';
 <?php
 
 $stmt = $pdo->prepare(
-    'SELECT p.id, p.content, p.created_at, p.is_hidden,
+    'SELECT p.id, p.content, p.created_at, p.is_hidden, p.space_id,
             u.id AS user_id, u.username
      FROM posts p
      JOIN users u ON u.id = p.user_id
@@ -141,6 +141,21 @@ if ($user) {
 ?>
 
 <a href="<?= e(url('/index.php')) ?>">&larr; Terug naar feed</a>
+
+<?php if ((int)($post['space_id'] ?? 0) > 0): ?>
+    <?php 
+    $spaceStmt = $pdo->prepare('SELECT title FROM spaces WHERE id = :id');
+    $spaceStmt->execute([':id' => (int)$post['space_id']]);
+    $space = $spaceStmt->fetch();
+    ?>
+    <?php if ($space): ?>
+        <div class="space-breadcrumb">
+            <a href="<?= e(url('/space.php?id=' . (int)$post['space_id'])) ?>">
+                ← Terug naar <?= e($space['title']) ?>
+            </a>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>
 
 <div class="post">
     <div class="post-vote">

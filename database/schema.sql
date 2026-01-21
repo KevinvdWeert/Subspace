@@ -23,9 +23,24 @@ CREATE TABLE IF NOT EXISTS profiles (
   CONSTRAINT fk_profiles_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS spaces (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  title VARCHAR(100) NOT NULL,
+  subject VARCHAR(255) NOT NULL,
+  description TEXT NULL,
+  is_hidden TINYINT(1) NOT NULL DEFAULT 0,
+  created_at DATETIME NOT NULL,
+  updated_at DATETIME NULL,
+  KEY ix_spaces_created_at (created_at),
+  KEY ix_spaces_user_created (user_id, created_at),
+  CONSTRAINT fk_spaces_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS posts (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
+  space_id INT NULL,
   content TEXT NOT NULL,
   link_url VARCHAR(500) NULL,
   media_url VARCHAR(500) NULL,
@@ -34,7 +49,9 @@ CREATE TABLE IF NOT EXISTS posts (
   updated_at DATETIME NULL,
   KEY ix_posts_created_at (created_at),
   KEY ix_posts_user_created (user_id, created_at),
-  CONSTRAINT fk_posts_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  KEY ix_posts_space (space_id),
+  CONSTRAINT fk_posts_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_posts_space FOREIGN KEY (space_id) REFERENCES spaces(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS post_likes (

@@ -713,3 +713,240 @@ footer a:hover {
 .create-post-btn:hover {
     background-color: var(--reddit-orange-hover);
 }
+
+/* Spaces Styling */
+.spaces-overview {
+    width: 100%;
+}
+
+.spaces-overview h1 {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 24px;
+    color: var(--text-primary);
+}
+
+.spaces-overview h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+}
+
+.space-form-container {
+    background-color: var(--bg-card);
+    padding: 16px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border-color);
+}
+
+.space-form-container h2 {
+    margin-top: 0;
+    margin-bottom: 16px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 2px rgba(79, 188, 255, 0.1);
+}
+
+.spaces-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.space-card {
+    background-color: var(--bg-card);
+    padding: 16px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.space-card:hover {
+    border-color: var(--text-secondary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.space-card h3 {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.space-card h3 a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+.space-card h3 a:hover {
+    text-decoration: underline;
+}
+
+.space-subject {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 400;
+}
+
+.space-description {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.space-stats {
+    display: flex;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    padding-top: 8px;
+    flex-wrap: wrap;
+}
+
+.space-detail {
+    width: 100%;
+}
+
+.space-header {
+    background-color: var(--bg-card);
+    padding: 16px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border-color);
+}
+
+.space-header h1 {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    margin-top: 0;
+}
+
+.space-subject {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.space-description {
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.space-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border-color);
+    padding-top: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.post-form-container {
+    background-color: var(--bg-card);
+    padding: 16px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border-color);
+}
+
+.post-form-container h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 16px;
+}
+
+.post-form-container textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.post-form-container textarea:focus {
+    outline: none;
+    border-color: var(--link-color);
+    box-shadow: 0 0 0 2px rgba(79, 188, 255, 0.1);
+}
+
+.post-form-container button {
+    background-color: var(--reddit-orange);
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.post-form-container button:hover {
+    background-color: var(--reddit-orange-hover);
+}
+
+.space-breadcrumb {
+    margin-bottom: 16px;
+    padding: 8px 12px;
+    background-color: rgba(79, 188, 255, 0.1);
+    border: 1px solid var(--link-color);
+    border-radius: 4px;
+}
+
+.space-breadcrumb a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.space-breadcrumb a:hover {
+    text-decoration: underline;
+}
