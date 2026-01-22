@@ -11,14 +11,17 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 $user = current_user();
 $pdo = Db::pdo();
 
+// Controleer of database het space_id veld heeft
 $hasSpaceId = db_has_column('posts', 'space_id');
 
+// Behandel POST verzoeken
 if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     require_login();
     require_not_blocked();
 
     $action = (string)($_POST['action'] ?? '');
 
+    // Nieuwe post aanmaken
     if ($action === 'post_create') {
         $content = trim((string)($_POST['content'] ?? ''));
         if ($content === '' || strlen($content) > 2000) {
@@ -38,12 +41,14 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
         $spaceId = 0;
         if ($hasSpaceId) {
+            // Valideer space ID indien opgegeven
             $spaceId = (int)($_POST['space_id'] ?? 0);
             if ($spaceId < 0) {
                 $spaceId = 0;
             }
 
             if ($spaceId > 0) {
+                // Controleer of space bestaat en toegankelijk is
                 $stmt = $pdo->prepare('SELECT id, is_hidden FROM spaces WHERE id = :id');
                 $stmt->execute([':id' => $spaceId]);
                 $spaceRow = $stmt->fetch();
@@ -86,6 +91,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         redirect('/index.php?ok=post');
     }
 
+    // Like toggle (upvote)
     if ($action === 'like_toggle') {
         $postId = (int)($_POST['post_id'] ?? 0);
         if ($postId <= 0) {
@@ -107,6 +113,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         $stmt->execute([':post_id' => $postId, ':user_id' => (int)$user['id']]);
         $exists = (bool)$stmt->fetchColumn();
 
+        // Toggle like: verwijder als al geliked, anders toevoegen
         if ($exists) {
             $stmt = $pdo->prepare('DELETE FROM post_likes WHERE post_id = :post_id AND user_id = :user_id');
             $stmt->execute([':post_id' => $postId, ':user_id' => (int)$user['id']]);
@@ -146,6 +153,7 @@ require_once __DIR__ . '/includes/header.php';
 <h1 class="h3 mb-3">Feed</h1>
 
 <?php
+// Bereken paginering
 $isAdmin = is_admin() ? 1 : 0;
 
 $page = (int)($_GET['page'] ?? 1);
@@ -157,6 +165,7 @@ $perPage = 10;
 $fetchLimit = $perPage + 1;
 $offset = ($page - 1) * $perPage;
 
+// Haal posts op met gebruikers en space informatie
 if ($hasSpaceId) {
     $stmt = $pdo->prepare(
     'SELECT p.id, p.content, p.media_url, p.created_at, p.space_id, u.username,
@@ -186,6 +195,7 @@ if ($hasSpaceId) {
     );
 }
 
+// Bepaal of er een volgende pagina is
 $posts = $stmt->fetchAll();
 $hasNextPage = count($posts) > $perPage;
 if ($hasNextPage) {
