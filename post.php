@@ -189,7 +189,11 @@ if ($user) {
     </div>
 </div>
 
-<h2 class="h5 mb-3">Comments (<?= count($comments) ?>)</h2>
+<h2 class="h5 mb-3 d-flex align-items-center gap-2">
+    <i class="bi bi-chat-dots text-secondary" aria-hidden="true"></i>
+    <span>Comments</span>
+    <span class="text-secondary fw-normal">(<?= count($comments) ?>)</span>
+</h2>
 
 <?php if ($user): ?>
     <?php require_not_blocked(); ?>

@@ -1,47 +1,41 @@
-/* ===================================================================
-   Subspace - Modern Dark Mode Theme with Bootstrap 5.3
-   Premium visual design with minimal custom CSS
-   =================================================================== */
+/* Subspace theme */
 
-/* ===================================================================
-   CSS VARIABLES & THEME SETUP
-   =================================================================== */
 :root {
-  /* Core palette - Brand purple + green accent */
-  --subspace-bg: #0b0f19;
-  --subspace-surface: #1a1f2e;
-  --subspace-surface-hover: #222838;
-  --subspace-border: rgba(139, 92, 246, 0.12);
-  --subspace-text: rgba(255, 255, 255, 0.92);
-  --subspace-text-muted: rgba(255, 255, 255, 0.6);
-  --subspace-brand: #8b5cf6;
-  --subspace-brand-hover: #a78bfa;
-  --subspace-accent: #22c55e;
-  --subspace-accent-hover: #16a34a;
+  /* Core palette - Light (white + blue) */
+  --subspace-bg: #f6f9ff;
+  --subspace-surface: #ffffff;
+  --subspace-surface-hover: #f0f6ff;
+  --subspace-border: rgba(37, 99, 235, 0.16);
+  --subspace-text: rgba(15, 23, 42, 0.92);
+  --subspace-text-muted: rgba(15, 23, 42, 0.62);
+  --subspace-brand: #2563eb;
+  --subspace-brand-hover: #1d4ed8;
+  --subspace-accent: #0ea5e9;
+  --subspace-accent-hover: #0284c7;
   --subspace-danger: #ef4444;
   --subspace-warning: #f59e0b;
   --subspace-info: #3b82f6;
 
   /* Bootstrap variable overrides */
   --bs-primary: var(--subspace-brand);
-  --bs-primary-rgb: 139, 92, 246;
-  --bs-secondary: #64748b;
+  --bs-primary-rgb: 37, 99, 235;
+  --bs-secondary: #475569;
   --bs-success: var(--subspace-accent);
   --bs-danger: var(--subspace-danger);
   --bs-warning: var(--subspace-warning);
   --bs-info: var(--subspace-info);
   --bs-body-bg: var(--subspace-bg);
   --bs-body-color: var(--subspace-text);
-  --bs-body-color-rgb: 255, 255, 255;
+  --bs-body-color-rgb: 15, 23, 42;
   --bs-border-color: var(--subspace-border);
   --bs-border-radius: 0.5rem;
   --bs-border-radius-sm: 0.375rem;
   --bs-border-radius-lg: 0.75rem;
   --bs-tertiary-bg: var(--subspace-surface);
   --bs-secondary-bg: var(--subspace-surface);
-  --bs-link-color: var(--subspace-brand-hover);
-  --bs-link-hover-color: var(--subspace-brand);
-  --bs-focus-ring-color: rgba(139, 92, 246, 0.25);
+  --bs-link-color: var(--subspace-brand);
+  --bs-link-hover-color: var(--subspace-brand-hover);
+  --bs-focus-ring-color: rgba(37, 99, 235, 0.20);
   
   /* Spacing scale */
   --spacing-xs: 0.5rem;
@@ -52,9 +46,8 @@
   --spacing-2xl: 3rem;
 }
 
-/* ===================================================================
-   BASE STYLES
-   =================================================================== */
+/* BASE STYLES */
+
 html, body {
   height: 100%;
   scroll-behavior: smooth;
@@ -67,9 +60,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===================================================================
-   TYPOGRAPHY
-   =================================================================== */
+/* TYPOGRAPHY */
 h1, .h1 { font-size: 2rem; font-weight: 600; line-height: 1.2; margin-bottom: var(--spacing-md); }
 h2, .h2 { font-size: 1.5rem; font-weight: 600; line-height: 1.3; margin-bottom: var(--spacing-sm); }
 h3, .h3 { font-size: 1.25rem; font-weight: 600; line-height: 1.4; margin-bottom: var(--spacing-sm); }
@@ -81,18 +72,14 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   color: var(--subspace-text-muted) !important;
 }
 
-/* ===================================================================
-   LAYOUT CONTAINERS
-   =================================================================== */
+/* LAYOUT CONTAINERS */
 .subspace-content {
   max-width: 920px;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* ===================================================================
-   SIDEBAR / NAVIGATION
-   =================================================================== */
+/* SIDEBAR / NAVIGATION */
 .subspace-sidebar {
   width: 280px;
   background: var(--subspace-surface);
@@ -104,20 +91,51 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   width: 40px;
   height: 40px;
   border-radius: 0.75rem;
-  background: linear-gradient(135deg, var(--subspace-brand), var(--subspace-accent));
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.20), transparent 45%),
+    linear-gradient(135deg, var(--subspace-brand), var(--subspace-accent));
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 1.25rem;
-  color: white;
-  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: var(--subspace-text);
+    border: 1px solid rgba(37, 99, 235, 0.18);
+    box-shadow:
+        0 10px 22px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(124, 58, 237, 0.20);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    will-change: transform, box-shadow, filter;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  inset: -40% -40% auto auto;
+  width: 120%;
+  height: 120%;
+  transform: rotate(25deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  opacity: 0.0;
+  transition: opacity 0.2s ease;
 }
 
 .brand-mark:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(124, 58, 237, 0.28);
+  filter: saturate(1.05);
+}
+
+.brand-mark:hover::after {
+  opacity: 1;
 }
 
 .brand-text {
@@ -135,7 +153,6 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   color: var(--subspace-text-muted);
   font-weight: 500;
   transition: all 0.2s ease;
-  border-left: 3px solid transparent;
 }
 
 .nav-pills .nav-link:hover {
@@ -179,9 +196,7 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   font-size: 0.875rem;
 }
 
-/* ===================================================================
-   CARDS & POST LAYOUT
-   =================================================================== */
+/* CARDS & POST LAYOUT */
 .card {
   background: var(--subspace-surface);
   border: 1px solid var(--subspace-border);
@@ -190,13 +205,29 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   transition: all 0.2s ease;
 }
 
-.card:hover {
-  border-color: rgba(139, 92, 246, 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+.card-body {
+  /* requested "feed/form" look + easing animation on EVERY card-body */
+  background: var(--subspace-surface);
+  border: 1px solid var(--subspace-border);
+  border-radius: var(--bs-border-radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease;
+
+  /* keep existing spacing */
+  padding: var(--spacing-lg);
 }
 
-.card-body {
-  padding: var(--spacing-lg);
+/* animate on hover/focus (so the transition is visible) */
+.card:hover > .card-body,
+.card:focus-within > .card-body,
+.card-body:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-color: rgba(37, 99, 235, 0.28);
+}
+
+.card:hover {
+  border-color: rgba(37, 99, 235, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .card-footer {
@@ -231,15 +262,15 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   transform: scale(1.1);
 }
 
-/* ===================================================================
-   MEDIA & IMAGES
-   =================================================================== */
+/* MEDIA & IMAGES */
 .post-image {
   width: 100%;
-  max-height: 520px;
+  max-height: 420px;
   object-fit: cover;
   border-radius: var(--bs-border-radius);
   border: 1px solid var(--subspace-border);
+  background: var(--subspace-bg);
+  display: block;
 }
 
 .subspace-avatar-img,
@@ -248,22 +279,31 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   height: 72px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--subspace-border);
+  border: 2px solid rgba(37, 99, 235, 0.16);
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(124, 58, 237, 0.20);
 }
 
 .subspace-avatar-fallback {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--subspace-brand), var(--subspace-accent));
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.18), transparent 45%),
+    linear-gradient(135deg, var(--subspace-brand), var(--subspace-accent));
   color: white;
   font-weight: 700;
   font-size: 1.5rem;
 }
 
-/* ===================================================================
-   FORMS & INPUTS
-   =================================================================== */
+@media (max-width: 576px) {
+  .post-image {
+    max-height: 320px;
+  }
+}
+
+/* FORMS & INPUTS */
 .form-label {
   font-weight: 600;
   font-size: 0.875rem;
@@ -317,9 +357,7 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   box-shadow: 0 0 0 0.25rem rgba(239, 68, 68, 0.25);
 }
 
-/* ===================================================================
-   BUTTONS
-   =================================================================== */
+/* BUTTONS */
 .btn {
   font-weight: 600;
   font-size: 0.875rem;
@@ -379,9 +417,7 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   text-decoration: underline;
 }
 
-/* ===================================================================
-   BADGES
-   =================================================================== */
+/* BADGES */
 .badge {
   font-weight: 600;
   font-size: 0.75rem;
@@ -389,9 +425,7 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   border-radius: var(--bs-border-radius-sm);
 }
 
-/* ===================================================================
-   TABLES (Admin)
-   =================================================================== */
+/* TABLES (Admin) */
 .table {
   color: var(--subspace-text);
   border-color: var(--subspace-border);
@@ -425,9 +459,7 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   border: 1px solid var(--subspace-border);
 }
 
-/* ===================================================================
-   ALERTS & NOTIFICATIONS
-   =================================================================== */
+/* ALERTS & NOTIFICATIONS */
 .alert {
   border-radius: var(--bs-border-radius);
   border: 1px solid;
@@ -460,12 +492,10 @@ h6, .h6 { font-size: 0.875rem; font-weight: 600; line-height: 1.5; margin-bottom
   color: var(--subspace-info);
 }
 
-/* ===================================================================
-   CODE BLOCKS (for policy/static pages)
-   =================================================================== */
+/* CODE BLOCKS (for policy/static pages) */
 pre, code {
   color: var(--subspace-text);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(37, 99, 235, 0.05);
   border-radius: var(--bs-border-radius-sm);
 }
 
@@ -481,15 +511,13 @@ code {
   font-size: 0.875em;
 }
 
-/* ===================================================================
-   UTILITIES & HELPERS
-   =================================================================== */
+/* UTILITIES & HELPERS */
 .shadow-sm {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .shadow {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .gap-1 { gap: 0.25rem !important; }
@@ -497,9 +525,8 @@ code {
 .gap-3 { gap: 1rem !important; }
 .gap-4 { gap: 1.5rem !important; }
 
-/* ===================================================================
-   RESPONSIVE DESIGN
-   =================================================================== */
+
+/* RESPONSIVE DESIGN */
 @media (max-width: 768px) {
   .subspace-sidebar {
     position: fixed;
@@ -522,9 +549,7 @@ code {
   }
 }
 
-/* ===================================================================
-   ACCESSIBILITY IMPROVEMENTS
-   =================================================================== */
+/* ACCESSIBILITY IMPROVEMENTS */
 *:focus-visible {
   outline: 2px solid var(--bs-focus-ring-color);
   outline-offset: 2px;

@@ -5,6 +5,11 @@
 
 Doel van deze planning: een haalbare verdeling van werk zodat de documentatie in week 1 af is en we in week 2–3 bouwen, testen en presenteren.
 
+**Taakverdeling (globaal):**
+- **Luka:** Subspace (opzet/structuur), documentatie, image upload functionaliteit
+- **Kijan:** Front-end (CSS/styling en UI)
+- **Ik:** Back-end, bestandsstructuren, database (ontwerp + implementatie)
+
 ---
 
 ## Week 1 — Planning & ontwerp (oplevering documentatie vrijdag)

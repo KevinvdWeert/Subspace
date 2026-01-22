@@ -149,6 +149,15 @@ require_once __DIR__ . '/includes/header.php';
 <?php
 $isAdmin = is_admin() ? 1 : 0;
 
+$page = (int)($_GET['page'] ?? 1);
+if ($page < 1) {
+    $page = 1;
+}
+
+$perPage = 10;
+$fetchLimit = $perPage + 1;
+$offset = ($page - 1) * $perPage;
+
 if ($hasSpaceId) {
     $stmt = $pdo->prepare(
     'SELECT p.id, p.content, p.media_url, p.created_at, p.space_id, u.username,
@@ -162,7 +171,7 @@ if ($hasSpaceId) {
            AND (p.space_id IS NULL OR s.id IS NOT NULL)
            AND (p.space_id IS NULL OR s.is_hidden = 0 OR :is_admin = 1)
          ORDER BY p.created_at DESC
-         LIMIT 25'
+         LIMIT ' . (int)$fetchLimit . ' OFFSET ' . (int)$offset
     );
     $stmt->execute([':is_admin' => $isAdmin]);
 } else {
@@ -174,11 +183,15 @@ if ($hasSpaceId) {
          JOIN users u ON u.id = p.user_id
          WHERE p.is_hidden = 0
          ORDER BY p.created_at DESC
-         LIMIT 25'
+         LIMIT ' . (int)$fetchLimit . ' OFFSET ' . (int)$offset
     );
 }
 
 $posts = $stmt->fetchAll();
+$hasNextPage = count($posts) > $perPage;
+if ($hasNextPage) {
+    $posts = array_slice($posts, 0, $perPage);
+}
 ?>
     <?php require_not_blocked(); ?>
     <form class="card p-3 mb-3" method="post" action="<?= e(url('/index.php')) ?>" enctype="multipart/form-data">
@@ -268,12 +281,27 @@ $posts = $stmt->fetchAll();
                         <img class="post-image img-fluid rounded border" src="<?= e(url((string)$post['media_url'])) ?>" alt="" loading="lazy">
                     <?php endif; ?>
 
-                    <a class="btn btn-sm btn-link px-0" href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">
-                        💬 <?= (int)$post['comment_count'] ?> Comments
+                    <a class="btn btn-sm btn-outline-secondary mt-2" href="<?= e(url('/post.php?id=' . (int)$post['id'])) ?>">
+                        <i class="bi bi-chat-dots me-1" aria-hidden="true"></i>
+                        <?= (int)$post['comment_count'] ?> <span class="d-none d-sm-inline">Comments</span>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 <?php endforeach; ?>
+
+<?php if ($page > 1 || $hasNextPage): ?>
+    <nav class="d-flex justify-content-center justify-content-md-end mt-4" aria-label="Feed pagination">
+        <ul class="pagination mb-0">
+            <li class="page-item <?= $page <= 1 ? 'disabled' : '' ?>">
+                <a class="page-link" href="<?= e(url('/index.php?page=' . max(1, $page - 1))) ?>" aria-label="Previous page">Previous</a>
+            </li>
+            <li class="page-item disabled"><span class="page-link">Page <?= (int)$page ?></span></li>
+            <li class="page-item <?= !$hasNextPage ? 'disabled' : '' ?>">
+                <a class="page-link" href="<?= e(url('/index.php?page=' . ($page + 1))) ?>" aria-label="Next page">Next</a>
+            </li>
+        </ul>
+    </nav>
+<?php endif; ?>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
