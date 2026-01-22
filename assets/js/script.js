@@ -238,6 +238,81 @@
     lazyBgs.forEach((el) => io.observe(el));
   }
 
+  // Infinite scroll for spaces
+  function setupInfiniteScroll() {
+    const container = document.querySelector('[data-infinite-scroll]');
+    if (!container) return;
+
+    const loadMoreUrl = container.getAttribute('data-load-more-url');
+    if (!loadMoreUrl) return;
+
+    let loading = false;
+    let page = 1;
+    let hasMore = true;
+
+    const loadMore = async () => {
+      if (loading || !hasMore) return;
+      loading = true;
+
+      const loadingIndicator = document.createElement('div');
+      loadingIndicator.className = 'text-center py-4';
+      loadingIndicator.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
+      container.appendChild(loadingIndicator);
+
+      try {
+        page++;
+        const url = new URL(loadMoreUrl, window.location.origin);
+        url.searchParams.set('page', page);
+        url.searchParams.set('ajax', '1');
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Network response was not ok');
+
+        const html = await response.text();
+        loadingIndicator.remove();
+
+        if (html.trim() === '' || html.trim() === '[]') {
+          hasMore = false;
+          return;
+        }
+
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        
+        while (tempDiv.firstChild) {
+          container.appendChild(tempDiv.firstChild);
+        }
+
+        // Re-setup lazy loading for new images
+        setupLazyLoading();
+      } catch (error) {
+        console.error('Error loading more content:', error);
+        loadingIndicator.remove();
+      } finally {
+        loading = false;
+      }
+    };
+
+    // Intersection Observer for automatic loading
+    const sentinel = document.createElement('div');
+    sentinel.className = 'infinite-scroll-sentinel';
+    sentinel.style.height = '1px';
+    container.parentElement.appendChild(sentinel);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && hasMore) {
+            loadMore();
+          }
+        });
+      },
+      { root: null, rootMargin: '400px', threshold: 0.01 }
+    );
+
+    observer.observe(sentinel);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     injectStyles(CSS);
 
@@ -245,5 +320,6 @@
     setupNavigationLoader(loader);
 
     setupLazyLoading();
+    setupInfiniteScroll();
   });
 })();

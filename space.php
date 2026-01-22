@@ -12,6 +12,44 @@ $user = current_user();
 
 // Bepaal of we de overzichtspagina of detailpagina tonen
 $spaceId = (int)($_GET['id'] ?? 0);
+
+// Handle AJAX requests for infinite scroll
+$isAjax = isset($_GET['ajax']) && $_GET['ajax'] === '1';
+$page = max(1, (int)($_GET['page'] ?? 1));
+$perPage = 20;
+$offset = ($page - 1) * $perPage;
+
+if ($isAjax && $spaceId === 0) {
+    // Return only the space cards for infinite scroll
+    $spaces = get_spaces($perPage, $offset, is_admin());
+    
+    if (empty($spaces)) {
+        exit(''); // No more results
+    }
+    
+    foreach ($spaces as $space): ?>
+        <div class="col">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                        <h3 class="h6 mb-0">
+                            <a class="text-decoration-none" href="<?= e(url('/space.php?id=' . (int)$space['id'])) ?>"><?= e($space['title']) ?></a>
+                        </h3>
+                        <?php if ((int)$space['is_hidden'] === 1): ?>
+                            <span class="badge text-bg-danger">Hidden</span>
+                        <?php endif; ?>
+                    </div>
+                    <div class="text-secondary small mt-1 mb-2"><?= e($space['subject']) ?></div>
+                    <?php if (!empty($space['description'])): ?>
+                        <div class="small mb-2"><?= e(substr((string)$space['description'], 0, 150)) ?><?= strlen((string)$space['description']) > 150 ? '...' : '' ?></div>
+                    <?php endif; ?>
+                    <div class="small text-secondary">Door: <?= e($space['username']) ?> · <?= (int)$space['post_count'] ?> posts · <?= e($space['created_at']) ?></div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach;
+    exit;
+}
 $action = (string)($_GET['action'] ?? 'overview');
 
 // POST actions
@@ -286,7 +324,7 @@ if ($spaceId > 0) {
         if (empty($spaces)): ?>
             <div class="alert alert-secondary" role="alert">Geen spaces beschikbaar.</div>
         <?php else: ?>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3" data-infinite-scroll data-load-more-url="<?= e(url('/space.php')) ?>">
                 <?php foreach ($spaces as $space): ?>
                     <div class="col">
                         <div class="card shadow-sm h-100">

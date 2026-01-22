@@ -90,6 +90,9 @@ $seoTwitterCard = (string)($seo['twitter_card'] ?? 'summary');
             <li class="nav-item">
                 <a class="nav-link <?= e($isActive('space.php')) ?>" href="<?= e(url('/space.php')) ?>">Spaces</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link <?= e($isActive('search.php')) ?>" href="<?= e(url('/search.php')) ?>">Search</a>
+            </li>
             <?php if ($user): ?>
                 <li class="nav-item">
                     <a class="nav-link <?= e($isActive('profile.php')) ?>" href="<?= e(url('/profile.php')) ?>">profiel</a>
