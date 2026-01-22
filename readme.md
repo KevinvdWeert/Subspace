@@ -111,9 +111,9 @@ return [
 
 ### Test Accounts
 
-If you imported the full database with sample data, test accounts are available:
-- Username: (various users in database)
-- Password: password123 (for all sample users)
+If you imported the full database with sample data, test accounts are available with the password `password123` for all users. Example accounts include:
+- Regular users: `alexj`, `mariah_lee`, `coding_wizard`, `travel_bug`, `music_lover`, `bookworm`, etc.
+- Admin accounts: `admin_jane`, `admin_mark`
 
 ### Main Features
 
