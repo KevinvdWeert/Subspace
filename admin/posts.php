@@ -12,6 +12,7 @@ require_admin();
 
 $pdo = Db::pdo();
 
+// Behandel POST acties (hide/unhide posts)
 if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $action = (string)($_POST['action'] ?? '');
     if ($action !== 'toggle_hide') {
@@ -24,6 +25,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         redirect('/admin/posts.php');
     }
 
+    // Toggle is_hidden status
     $stmt = $pdo->prepare('UPDATE posts SET is_hidden = 1 - is_hidden, updated_at = :updated_at WHERE id = :id');
     $stmt->execute([':updated_at' => now_datetime(), ':id' => $postId]);
     redirect('/admin/posts.php');
@@ -31,6 +33,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
 require_once __DIR__ . '/../includes/header.php';
 
+// Haal recente posts op voor moderatie
 $stmt = $pdo->query(
     'SELECT p.id, p.content, p.created_at, p.is_hidden, u.username
      FROM posts p

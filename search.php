@@ -11,7 +11,7 @@ $pdo = Db::pdo();
 $user = current_user();
 
 $query = trim((string)($_GET['q'] ?? ''));
-$type = trim((string)($_GET['type'] ?? 'all')); // all, users, spaces, posts
+$type = trim((string)($_GET['type'] ?? 'all')); // alle, gebruikers, spaces, posts
 
 $results = [
     'users' => [],
@@ -22,7 +22,7 @@ $results = [
 if ($query !== '' && strlen($query) >= 2) {
     $searchPattern = '%' . $query . '%';
     
-    // Search users
+    // Zoek gebruikers
     if ($type === 'all' || $type === 'users') {
         $stmt = $pdo->prepare(
             'SELECT u.id, u.username, u.created_at, p.display_name, p.avatar_url
@@ -39,7 +39,7 @@ if ($query !== '' && strlen($query) >= 2) {
         $results['users'] = $stmt->fetchAll();
     }
     
-    // Search spaces
+    // Zoek spaces
     if ($type === 'all' || $type === 'spaces') {
         $hasSpaceId = db_has_column('posts', 'space_id');
         $postCountSelect = $hasSpaceId
@@ -65,7 +65,7 @@ if ($query !== '' && strlen($query) >= 2) {
         $results['spaces'] = $stmt->fetchAll();
     }
     
-    // Search posts
+    // Zoek posts
     if ($type === 'all' || $type === 'posts') {
         $hasSpaceId = db_has_column('posts', 'space_id');
         $spaceJoin = $hasSpaceId ? 'LEFT JOIN spaces sp ON sp.id = p.space_id' : '';
@@ -90,6 +90,7 @@ if ($query !== '' && strlen($query) >= 2) {
     }
 }
 
+// Bereken totaal aantal resultaten
 $totalResults = count($results['users']) + count($results['spaces']) + count($results['posts']);
 
 require_once __DIR__ . '/includes/header.php';

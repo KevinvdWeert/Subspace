@@ -2,11 +2,13 @@
 
 declare(strict_types=1);
 
+// Escape HTML karakters voor veilige output
 function e(?string $value): string
 {
     return htmlspecialchars($value ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+// Haal het basis pad van de applicatie op uit config
 function app_base_path(): string
 {
     static $base = null;
@@ -25,11 +27,12 @@ function app_base_path(): string
     return $base;
 }
 
+// Genereer een volledige URL met basis pad
 function url(string $path = '/'): string
 {
     $path = (string)$path;
 
-    // Allow absolute URLs
+    // Sta absolute URLs toe
     if (preg_match('#^https?://#i', $path) === 1) {
         return $path;
     }
@@ -47,21 +50,23 @@ function url(string $path = '/'): string
         return $path;
     }
 
-    // If base is a full URL, join as URL.
+    // Als base een volledige URL is, voeg samen als URL
     if (preg_match('#^https?://#i', $base) === 1) {
         return rtrim($base, '/') . $path;
     }
 
-    // Otherwise treat it as a path prefix.
+    // Anders behandel het als pad prefix
     return rtrim($base, '/') . $path;
 }
 
+// Stuur de gebruiker door naar een andere pagina
 function redirect(string $path): never
 {
     header('Location: ' . url($path));
     exit;
 }
 
+// Vereis een specifieke HTTP methode
 function require_method(string $method): void
 {
     if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') !== strtoupper($method)) {
@@ -70,13 +75,14 @@ function require_method(string $method): void
     }
 }
 
+// Geef de huidige datum en tijd terug als string
 function now_datetime(): string
 {
     return (new DateTimeImmutable('now'))->format('Y-m-d H:i:s');
 }
 
 /**
- * Lightweight schema check to keep pages working while DB is being migrated.
+ * Lichtgewicht schema controle om pagina's werkend te houden tijdens DB migratie.
  */
 function db_has_column(string $table, string $column): bool
 {
@@ -104,6 +110,7 @@ function db_has_column(string $table, string $column): bool
     return (bool)$cache[$key];
 }
 
+// Maak een nieuwe space aan en retourneer het ID
 function create_space(int $user_id, string $title, string $subject, ?string $description = null): int
 {
     require_once __DIR__ . '/db.php';
@@ -125,6 +132,7 @@ function create_space(int $user_id, string $title, string $subject, ?string $des
     return (int)$pdo->lastInsertId();
 }
 
+// Haal een specifieke space op met gebruikersinformatie
 function get_space(int $space_id): ?array
 {
     require_once __DIR__ . '/db.php';
@@ -144,6 +152,7 @@ function get_space(int $space_id): ?array
     return $space ?: null;
 }
 
+// Haal een lijst van spaces op met post aantallen
 function get_spaces(int $limit = 20, int $offset = 0, bool $include_hidden = false): array
 {
     require_once __DIR__ . '/db.php';
@@ -165,7 +174,7 @@ function get_spaces(int $limit = 20, int $offset = 0, bool $include_hidden = fal
              ORDER BY s.created_at DESC
              LIMIT :limit OFFSET :offset";
     } else {
-        // Old DB schema: no posts.space_id => can't count posts per space safely.
+        // Oude DB schema: geen posts.space_id => kan posts per space niet veilig tellen
         $sql =
             "SELECT s.id, s.user_id, s.title, s.subject, s.description, s.is_hidden, s.created_at,
                     u.username, 0 AS post_count
@@ -184,6 +193,7 @@ function get_spaces(int $limit = 20, int $offset = 0, bool $include_hidden = fal
     return $stmt->fetchAll();
 }
 
+// Haal alle posts op voor een specifieke space
 function get_space_posts(int $space_id, int $limit = 20, int $offset = 0): array
 {
     require_once __DIR__ . '/db.php';
@@ -212,8 +222,8 @@ function get_space_posts(int $space_id, int $limit = 20, int $offset = 0): array
 }
 
 /**
- * Save an uploaded image from $_FILES and return its public web path (e.g. /assets/uploads/<name>.jpg).
- * Returns null when no file was uploaded.
+ * Sla een geüploade afbeelding op en retourneer het publieke pad (bijv. /assets/uploads/<naam>.jpg).
+ * Retourneert null als er geen bestand werd geüpload.
  */
 function save_uploaded_image(string $fieldName, int $maxBytes = 5242880): ?string
 {
@@ -241,7 +251,7 @@ function save_uploaded_image(string $fieldName, int $maxBytes = 5242880): ?strin
         throw new RuntimeException('upload_invalid');
     }
 
-    // Validate mime type + image structure.
+    // Valideer mime type en afbeelding structuur
     if (!function_exists('finfo_open')) {
         throw new RuntimeException('upload_server_missing_finfo');
     }
@@ -260,6 +270,7 @@ function save_uploaded_image(string $fieldName, int $maxBytes = 5242880): ?strin
         throw new RuntimeException('upload_type_not_allowed');
     }
 
+    // Maak upload directory aan indien nodig
     $uploadDirFs = dirname(__DIR__) . '/assets/uploads';
     if (!is_dir($uploadDirFs)) {
         if (!mkdir($uploadDirFs, 0755, true) && !is_dir($uploadDirFs)) {
@@ -267,6 +278,7 @@ function save_uploaded_image(string $fieldName, int $maxBytes = 5242880): ?strin
         }
     }
 
+    // Genereer unieke bestandsnaam
     $fileName = bin2hex(random_bytes(16)) . '.' . $extMap[$mime];
     $destFs = $uploadDirFs . '/' . $fileName;
     if (!move_uploaded_file($tmpName, $destFs)) {
@@ -277,8 +289,8 @@ function save_uploaded_image(string $fieldName, int $maxBytes = 5242880): ?strin
 }
 
 /**
- * Validate and normalize a remote media URL (stored as-is and rendered by the browser).
- * Returns null when empty.
+ * Valideer en normaliseer een externe media URL (opgeslagen zoals het is en gerenderd door de browser).
+ * Retourneert null als leeg.
  */
 function normalize_media_url(?string $value, int $maxLength = 500): ?string
 {
@@ -293,6 +305,7 @@ function normalize_media_url(?string $value, int $maxLength = 500): ?string
         throw new RuntimeException('media_url_invalid');
     }
 
+    // Controleer of het een veilig protocol is
     $parts = parse_url($value);
     $scheme = strtolower((string)($parts['scheme'] ?? ''));
     if (!in_array($scheme, ['http', 'https'], true)) {

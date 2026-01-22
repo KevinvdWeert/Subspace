@@ -27,7 +27,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
         $mediaUrl = null;
         try {
-            // Prefer uploaded file if present, otherwise fall back to a remote URL.
+            // Kies geüpload bestand indien aanwezig, anders gebruik externe URL
             $mediaUrl = save_uploaded_image('image');
             if ($mediaUrl === null) {
                 $mediaUrl = normalize_media_url($_POST['media_url'] ?? null);
@@ -122,8 +122,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     exit('Bad Request');
 }
 
-// Test for notices
-
+// Controleer voor meldingen en toon deze
 $notice = null;
 if (isset($_GET['ok']) && $_GET['ok'] === 'post') {
     $notice = ['type' => 'success', 'message' => 'Post geplaatst.'];

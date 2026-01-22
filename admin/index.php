@@ -14,11 +14,13 @@ require_once __DIR__ . '/../includes/header.php';
 
 $pdo = Db::pdo();
 
+// Haal statistieken op
 $users = (int)$pdo->query('SELECT COUNT(*) FROM users')->fetchColumn();
 $posts = (int)$pdo->query('SELECT COUNT(*) FROM posts')->fetchColumn();
 $comments = (int)$pdo->query('SELECT COUNT(*) FROM post_comments')->fetchColumn();
 $likes = (int)$pdo->query('SELECT COUNT(*) FROM post_likes')->fetchColumn();
 
+// Tel actief geblokkeerde gebruikers
 $blocked = (int)$pdo->query(
     "SELECT COUNT(DISTINCT user_id)
      FROM user_blocks

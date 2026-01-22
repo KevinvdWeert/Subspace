@@ -16,7 +16,7 @@ $requestedUsername = trim((string)($_GET['u'] ?? ''));
 $targetId = $requestedId;
 $targetUsername = $requestedUsername;
 
-// Default route: /profile.php is "my profile" (requires login).
+// Standaard route: /profile.php is "mijn profiel" (vereist inloggen)
 if ($targetId <= 0 && $targetUsername === '') {
     require_login();
     require_not_blocked();
@@ -26,7 +26,7 @@ if ($targetId <= 0 && $targetUsername === '') {
 
 $errors = [];
 
-// Allow edits only on your own profile.
+// Sta wijzigingen alleen toe op je eigen profiel
 $isEditing = false;
 if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     require_login();
@@ -73,7 +73,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     }
 }
 
-// Load target profile
+// Laad doel profiel
 if ($targetId > 0) {
     $stmt = $pdo->prepare(
         'SELECT u.id, u.username, u.email, u.role, u.created_at,
@@ -107,7 +107,7 @@ $canSeeHidden = $isSelf || is_admin();
 
 $hasSpaceId = db_has_column('posts', 'space_id');
 
-// Stats
+// Statistieken
 $stmt = $pdo->prepare(
     'SELECT COUNT(*)
      FROM spaces
