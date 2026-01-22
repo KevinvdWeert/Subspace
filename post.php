@@ -7,6 +7,7 @@ require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 
+// Valideer post ID
 $postId = (int)($_GET['id'] ?? 0);
 if ($postId <= 0) {
     http_response_code(404);
@@ -15,6 +16,7 @@ if ($postId <= 0) {
 
 $pdo = Db::pdo();
 
+// Behandel POST acties (like toggle en comment aanmaken)
 if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     require_login();
     require_not_blocked();
@@ -22,6 +24,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $user = current_user();
     $action = (string)($_POST['action'] ?? '');
 
+    // Controleer of post bestaat en zichtbaar is
     $stmt = $pdo->prepare('SELECT is_hidden FROM posts WHERE id = :id');
     $stmt->execute([':id' => $postId]);
     $row = $stmt->fetch();
@@ -49,6 +52,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
         redirect('/post.php?id=' . $postId);
     }
 
+    // Maak nieuwe comment aan
     if ($action === 'comment_create') {
         $content = trim((string)($_POST['content'] ?? ''));
         if ($content === '' || strlen($content) > 2000) {
@@ -73,6 +77,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     exit('Bad Request');
 }
 
+// Bereid meldingen voor
 $notice = null;
 if (isset($_GET['ok']) && $_GET['ok'] === 'comment') {
     $notice = ['type' => 'success', 'message' => 'Reactie geplaatst.'];
@@ -89,6 +94,7 @@ require_once __DIR__ . '/includes/header.php';
 
 <?php
 
+// Haal post details op met gebruiker en space informatie
 $hasSpaceId = db_has_column('posts', 'space_id');
 $spaceIdSelect = $hasSpaceId ? 'p.space_id' : 'NULL AS space_id';
 
@@ -113,6 +119,7 @@ if ((int)$post['is_hidden'] === 1 && !is_admin()) {
     exit('Not Found');
 }
 
+// Haal alle comments op voor deze post
 $stmt = $pdo->prepare(
     'SELECT c.id, c.content, c.created_at, c.is_hidden, u.username
      FROM post_comments c
@@ -127,6 +134,7 @@ $stmt->execute([
 ]);
 $comments = $stmt->fetchAll();
 
+// Bereken like statistieken
 $user = current_user();
 
 $stmt = $pdo->prepare('SELECT COUNT(*) FROM post_likes WHERE post_id = :post_id');

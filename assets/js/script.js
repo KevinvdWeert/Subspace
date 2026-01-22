@@ -28,6 +28,7 @@
 .subspace-lazy.is-loaded{opacity:1;}
 `;
 
+  // Injecteer CSS in de pagina
   function injectStyles(cssText) {
     const style = document.createElement("style");
     style.setAttribute("data-subspace", "runtime-styles");
@@ -35,6 +36,7 @@
     document.head.appendChild(style);
   }
 
+  // Controleer of een URL dezelfde origin heeft
   function sameOrigin(url) {
     try {
       const u = new URL(url, window.location.href);
@@ -44,13 +46,15 @@
     }
   }
 
+  // Controleer of het alleen een hash navigatie is
   function isHashOnlyNav(anchor) {
     const href = anchor.getAttribute("href") || "";
     if (!href.startsWith("#")) return false;
-    // treat "#", "#section" as hash-only
+    // behandel "#", "#section" als alleen-hash
     return true;
   }
 
+  // Maak een laad-indicator voor pagina navigatie
   function createPageLoader() {
     const el = document.createElement("div");
     el.className = "subspace-loader";
@@ -72,13 +76,14 @@
     return { show, hide };
   }
 
+  // Setup navigatie loader voor interne links
   function setupNavigationLoader(loader) {
-    // Initial load: show quickly, then hide on load/pageshow.
+    // Eerste laden: toon snel, verberg bij load/pageshow
     loader.show();
     window.addEventListener("load", () => loader.hide(), { once: true });
-    window.addEventListener("pageshow", () => loader.hide()); // BFCache restore
+    window.addEventListener("pageshow", () => loader.hide()); // BFCache herstel
 
-    // Show on in-site navigations.
+    // Toon bij navigaties binnen de site
     document.addEventListener(
       "click",
       (e) => {
@@ -98,6 +103,7 @@
       { capture: true }
     );
 
+    // Toon loader bij formulier verzendingen
     document.addEventListener(
       "submit",
       (e) => {
@@ -111,13 +117,15 @@
     window.addEventListener("beforeunload", () => loader.show());
   }
 
+  // Markeer afbeeldingen voor eager of lazy loading
   function markEagerOrLazy(el) {
     if (el.hasAttribute("data-eager")) return; // opt-out
-    // Only set if not already specified by author.
+    // Alleen instellen als niet al opgegeven door auteur
     if (!el.getAttribute("loading")) el.setAttribute("loading", "lazy");
     if (!el.getAttribute("decoding")) el.setAttribute("decoding", "async");
   }
 
+  // Laad een afbeelding met fade-in effect
   function loadImg(img) {
     const dataSrc = img.getAttribute("data-src");
     const dataSrcset = img.getAttribute("data-srcset");
@@ -138,13 +146,14 @@
     img.addEventListener(
       "error",
       () => {
-        // Avoid staying invisible forever if it fails.
+        // Voorkom eeuwig onzichtbaar blijven bij fouten
         img.classList.add("is-loaded");
       },
       { once: true }
     );
   }
 
+  // Laad achtergrond afbeelding
   function loadBg(el) {
     const url = el.getAttribute("data-bg");
     if (!url) return;
@@ -153,6 +162,7 @@
     el.classList.add("is-loaded");
   }
 
+  // Setup lazy loading voor afbeeldingen en iframes
   function setupLazyLoading() {
     const imgs = Array.from(document.querySelectorAll("img"));
     const iframes = Array.from(document.querySelectorAll("iframe"));
@@ -162,12 +172,12 @@
     imgs.forEach((img) => {
       markEagerOrLazy(img);
 
-      // Apply a consistent "loading -> loaded" animation for all images (opt-out via data-eager)
+      // Pas consistente "loading -> loaded" animatie toe voor alle afbeeldingen (opt-out via data-eager)
       if (!img.hasAttribute("data-eager")) {
         img.classList.add("subspace-lazy");
 
         if (img.complete) {
-          // Cached / already loaded
+          // Gecachet / al geladen
           img.classList.add("is-loaded");
         } else {
           img.addEventListener(
@@ -185,7 +195,7 @@
 
       const wantsManagedLazy = img.hasAttribute("data-src") || img.hasAttribute("data-srcset");
       if (wantsManagedLazy) {
-        // managed lazy: only set real src/srcset when we decide to load
+        // beheerde lazy: alleen echte src/srcset instellen wanneer we besluiten te laden
         lazyImgs.push(img);
       }
     });
@@ -200,24 +210,25 @@
       lazyBgs.push(el);
     });
 
-    // If native lazy-loading exists, we can set src/srcset immediately and let the browser schedule it.
+    // Als native lazy-loading bestaat, kunnen we src/srcset direct instellen en de browser laat plannen
     const hasNativeLazyImg = "loading" in HTMLImageElement.prototype;
 
     if (hasNativeLazyImg) {
       lazyImgs.forEach(loadImg);
-      // Background images still need IO.
+      // Achtergrond afbeeldingen hebben nog steeds IO nodig
     }
 
     const needsIO = !hasNativeLazyImg || lazyBgs.length > 0;
     if (!needsIO) return;
 
     if (!("IntersectionObserver" in window)) {
-      // Fallback: load everything at once.
+      // Fallback: laad alles in één keer
       lazyImgs.forEach(loadImg);
       lazyBgs.forEach(loadBg);
       return;
     }
 
+    // Observeer elementen en laad ze wanneer ze in beeld komen
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -233,12 +244,12 @@
       { root: null, rootMargin: "200px 0px", threshold: 0.01 }
     );
 
-    // Only observe those not already handled by native eager scheduling.
+    // Observeer alleen elementen die nog niet door native eager scheduling zijn afgehandeld
     if (!hasNativeLazyImg) lazyImgs.forEach((img) => io.observe(img));
     lazyBgs.forEach((el) => io.observe(el));
   }
 
-  // Infinite scroll for spaces
+  // Oneindige scroll voor spaces pagina
   function setupInfiniteScroll() {
     const container = document.querySelector('[data-infinite-scroll]');
     if (!container) return;
@@ -250,10 +261,12 @@
     let page = 1;
     let hasMore = true;
 
+    // Laad meer content via AJAX
     const loadMore = async () => {
       if (loading || !hasMore) return;
       loading = true;
 
+      // Toon laad indicator
       const loadingIndicator = document.createElement('div');
       loadingIndicator.className = 'text-center py-4';
       loadingIndicator.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div>';
@@ -271,11 +284,13 @@
         const html = await response.text();
         loadingIndicator.remove();
 
+        // Controleer of er nog meer content is
         if (html.trim() === '' || html.trim() === '[]') {
           hasMore = false;
           return;
         }
 
+        // Voeg nieuwe content toe
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = html;
         
@@ -283,7 +298,7 @@
           container.appendChild(tempDiv.firstChild);
         }
 
-        // Re-setup lazy loading for new images
+        // Setup lazy loading opnieuw voor nieuwe afbeeldingen
         setupLazyLoading();
       } catch (error) {
         console.error('Error loading more content:', error);
@@ -293,7 +308,7 @@
       }
     };
 
-    // Intersection Observer for automatic loading
+    // Intersection Observer voor automatisch laden
     const sentinel = document.createElement('div');
     sentinel.className = 'infinite-scroll-sentinel';
     sentinel.style.height = '1px';
@@ -313,6 +328,7 @@
     observer.observe(sentinel);
   }
 
+  // Initialiseer alle functionaliteit bij DOM ready
   document.addEventListener("DOMContentLoaded", () => {
     injectStyles(CSS);
 

@@ -7,6 +7,7 @@ require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 
+// Redirect als al ingelogd
 if (current_user()) {
     redirect('/index.php');
 }
@@ -17,6 +18,7 @@ $old = [
     'email' => '',
 ];
 
+// Behandel registratie formulier
 if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $username = trim((string)($_POST['username'] ?? ''));
     $email = trim((string)($_POST['email'] ?? ''));
@@ -26,6 +28,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $old['username'] = $username;
     $old['email'] = $email;
 
+    // Valideer invoer
     if ($username === '' || strlen($username) < 3) {
         $errors['username'] = 'Username moet minimaal 3 tekens zijn.';
     }
@@ -42,14 +45,17 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if (!$errors) {
         $pdo = Db::pdo();
 
+        // Controleer of username of email al in gebruik is
         $stmt = $pdo->prepare('SELECT id FROM users WHERE username = :username OR email = :email');
         $stmt->execute([':username' => $username, ':email' => $email]);
         if ($stmt->fetch()) {
             $errors['username'] = 'Username of e-mail is al in gebruik.';
         } else {
+            // Maak nieuw account aan
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $now = now_datetime();
 
+            // Begin transactie voor atomaire operatie
             $pdo->beginTransaction();
             try {
                 $stmt = $pdo->prepare(
@@ -67,6 +73,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
                 $userId = (int)$pdo->lastInsertId();
 
+                // Maak leeg profiel aan voor nieuwe gebruiker
                 $stmt = $pdo->prepare('INSERT INTO profiles (user_id, display_name, bio, avatar_url, updated_at) VALUES (:user_id, NULL, NULL, NULL, :updated_at)');
                 $stmt->execute([':user_id' => $userId, ':updated_at' => $now]);
 
@@ -76,6 +83,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
                 throw $e;
             }
 
+            // Log gebruiker automatisch in na registratie
             session_regenerate_id(true);
             $_SESSION['user_id'] = $userId;
             redirect('/index.php');

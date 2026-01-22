@@ -15,6 +15,7 @@ $pdo = Db::pdo();
 $current = current_user();
 $currentId = $current ? (int)$current['id'] : 0;
 
+// Behandel POST acties (blokkeer/deblokkeer gebruikers)
 if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $action = (string)($_POST['action'] ?? '');
     if ($action !== 'toggle_block') {
@@ -26,10 +27,12 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if ($targetUserId <= 0) {
         redirect('/admin/users.php');
     }
+    // Voorkom dat admin zichzelf blokkeert
     if ($targetUserId === $currentId) {
         redirect('/admin/users.php?err=self');
     }
 
+    // Controleer of gebruiker al geblokkeerd is
     $stmt = $pdo->prepare(
         'SELECT id
          FROM user_blocks
@@ -43,9 +46,11 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $blockId = $stmt->fetchColumn();
 
     if ($blockId) {
+        // Deblokkeer gebruiker
         $stmt = $pdo->prepare('UPDATE user_blocks SET revoked_at = :revoked_at WHERE id = :id');
         $stmt->execute([':revoked_at' => now_datetime(), ':id' => (int)$blockId]);
     } else {
+        // Blokkeer gebruiker
         $stmt = $pdo->prepare(
             'INSERT INTO user_blocks (user_id, blocked_by_admin_id, reason, blocked_until, created_at, revoked_at)
              VALUES (:user_id, :admin_id, :reason, NULL, :created_at, NULL)'
@@ -67,6 +72,7 @@ if (isset($_GET['err']) && $_GET['err'] === 'self') {
     echo '<div class="alert alert-danger" role="alert">' . e('Je kunt jezelf niet blokkeren.') . '</div>';
 }
 
+// Haal alle gebruikers op
 $stmt = $pdo->query(
     'SELECT id, username, email, role, created_at
      FROM users
@@ -75,6 +81,7 @@ $stmt = $pdo->query(
 );
 $users = $stmt->fetchAll();
 
+// Haal lijst van geblokkeerde gebruikers op
 $activeBlocksStmt = $pdo->query(
     "SELECT user_id
      FROM user_blocks

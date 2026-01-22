@@ -7,6 +7,7 @@ require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/auth.php';
 
+// Redirect als al ingelogd
 if (current_user()) {
     redirect('/index.php');
 }
@@ -14,12 +15,14 @@ if (current_user()) {
 $errors = [];
 $old = ['login' => ''];
 
+// Behandel login formulier
 if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $login = trim((string)($_POST['login'] ?? ''));
     $password = (string)($_POST['password'] ?? '');
 
     $old['login'] = $login;
 
+    // Valideer invoer
     if ($login === '') {
         $errors['login'] = 'Vul je username of e-mail in.';
     }
@@ -30,10 +33,12 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     if (!$errors) {
         $pdo = Db::pdo();
 
+        // Zoek gebruiker op username of email
         $stmt = $pdo->prepare('SELECT id, password_hash FROM users WHERE username = :login_username OR email = :login_email LIMIT 1');
         $stmt->execute([':login_username' => $login, ':login_email' => $login]);
         $user = $stmt->fetch();
 
+        // Controleer wachtwoord en blokkering status
         if (!$user || !password_verify($password, (string)$user['password_hash'])) {
             $errors['login'] = 'Onjuiste inloggegevens.';
         } else {
@@ -42,6 +47,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             if ($block) {
                 $errors['login'] = 'Je account is geblokkeerd.';
             } else {
+                // Login succesvol - maak nieuwe sessie aan
                 session_regenerate_id(true);
                 $_SESSION['user_id'] = $userId;
                 redirect('/index.php');

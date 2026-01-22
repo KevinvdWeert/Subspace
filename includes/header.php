@@ -7,8 +7,10 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+// Controleer of gebruiker is ingelogd
 $user = current_user();
 
+// Bepaal welke navigatie link actief is
 $currentPath = strtolower((string)($_SERVER['SCRIPT_NAME'] ?? ''));
 $isActive = static function (string $path) use ($currentPath): string {
     $path = strtolower($path);
@@ -20,19 +22,20 @@ $isActive = static function (string $path) use ($currentPath): string {
 };
 $isAdminSection = str_starts_with($currentPath, '/admin/');
 
-// Lightweight spaces list for navigation.
+// Lichtgewicht spaces lijst voor navigatie
 try {
     $navSpaces = get_spaces(200, 0, is_admin());
 } catch (Throwable $e) {
     $navSpaces = [];
 }
 
-// seo setup
+// SEO meta tags instellen
 $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
 $host = (string)($_SERVER['HTTP_HOST'] ?? 'localhost');
 $requestUri = (string)($_SERVER['REQUEST_URI'] ?? '/');
 $defaultCanonical = $scheme . '://' . $host . $requestUri;
 
+// Gebruik custom SEO waarden als beschikbaar, anders standaard waarden
 $seo = (isset($seo) && is_array($seo)) ? $seo : [];
 $seoTitle = (string)($seo['title'] ?? 'Subspace');
 $seoDescription = (string)($seo['description'] ?? 'Subspace — explore spaces, share posts, and connect.');
@@ -43,7 +46,7 @@ $seoOgImage = isset($seo['og_image']) ? (string)$seo['og_image'] : '';
 $seoTwitterCard = (string)($seo['twitter_card'] ?? 'summary');
 ?>
 
-<!-- html structure -->
+<!-- HTML structuur -->
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
 <head>

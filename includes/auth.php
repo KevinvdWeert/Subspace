@@ -5,6 +5,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/helpers.php';
 
+// Haal de huidige ingelogde gebruiker op
 function current_user(): ?array
 {
     if (!isset($_SESSION['user_id'])) {
@@ -21,11 +22,13 @@ function current_user(): ?array
     return $user ?: null;
 }
 
+// Controleer of de gebruiker is ingelogd
 function is_logged_in(): bool
 {
     return current_user() !== null;
 }
 
+// Vereis dat de gebruiker is ingelogd, anders doorverwijzen naar login
 function require_login(): void
 {
     if (!is_logged_in()) {
@@ -33,12 +36,14 @@ function require_login(): void
     }
 }
 
+// Controleer of de huidige gebruiker een admin is
 function is_admin(): bool
 {
     $user = current_user();
     return $user && ($user['role'] ?? '') === 'admin';
 }
 
+// Vereis admin rechten, anders 403 fout
 function require_admin(): void
 {
     if (!is_admin()) {
@@ -47,6 +52,7 @@ function require_admin(): void
     }
 }
 
+// Haal een actieve blokkering op voor een gebruiker
 function active_user_block(?int $userId = null): ?array
 {
     if ($userId === null) {
@@ -59,6 +65,7 @@ function active_user_block(?int $userId = null): ?array
 
     $pdo = Db::pdo();
 
+    // Zoek naar actieve blokkering die niet is ingetrokken en nog geldig is
     $stmt = $pdo->prepare(
         'SELECT id, user_id, blocked_by_admin_id, reason, blocked_until, created_at, revoked_at
          FROM user_blocks
@@ -75,6 +82,7 @@ function active_user_block(?int $userId = null): ?array
     return $block ?: null;
 }
 
+// Vereis dat de gebruiker niet geblokkeerd is
 function require_not_blocked(): void
 {
     $user = current_user();

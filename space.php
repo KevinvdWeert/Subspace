@@ -13,18 +13,18 @@ $user = current_user();
 // Bepaal of we de overzichtspagina of detailpagina tonen
 $spaceId = (int)($_GET['id'] ?? 0);
 
-// Handle AJAX requests for infinite scroll
+// Behandel AJAX verzoeken voor oneindige scroll
 $isAjax = isset($_GET['ajax']) && $_GET['ajax'] === '1';
 $page = max(1, (int)($_GET['page'] ?? 1));
 $perPage = 20;
 $offset = ($page - 1) * $perPage;
 
 if ($isAjax && $spaceId === 0) {
-    // Return only the space cards for infinite scroll
+    // Retourneer alleen de space cards voor oneindige scroll
     $spaces = get_spaces($perPage, $offset, is_admin());
     
     if (empty($spaces)) {
-        exit(''); // No more results
+        exit(''); // Geen resultaten meer
     }
     
     foreach ($spaces as $space): ?>
@@ -52,7 +52,7 @@ if ($isAjax && $spaceId === 0) {
 }
 $action = (string)($_GET['action'] ?? 'overview');
 
-// POST actions
+// POST acties
 if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
     $postAction = (string)($_POST['action'] ?? '');
     
@@ -93,7 +93,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
             redirect('/space.php?id=' . $spaceId . '&err=space_schema');
         }
 
-        // Verify space exists
+        // Controleer of space bestaat
         $stmt = $pdo->prepare('SELECT id FROM spaces WHERE id = :id');
         $stmt->execute([':id' => $spaceId]);
         if (!$stmt->fetch()) {
@@ -157,7 +157,7 @@ if (strtoupper($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
 
 require_once __DIR__ . '/includes/header.php';
 
-// Show space detail page
+// Toon space detailpagina
 if ($spaceId > 0) {
     $space = get_space($spaceId);
     
@@ -269,7 +269,7 @@ if ($spaceId > 0) {
     
 
 <?php } else {
-    // Show spaces overview
+    // Toon spaces overzicht
     $notice = null;
     if (isset($_GET['ok']) && $_GET['ok'] === 'created') {
         $notice = ['type' => 'success', 'message' => 'Space aangemaakt.'];
