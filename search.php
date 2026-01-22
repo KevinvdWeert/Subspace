@@ -11,7 +11,7 @@ $pdo = Db::pdo();
 $user = current_user();
 
 $query = trim((string)($_GET['q'] ?? ''));
-$type = trim((string)($_GET['type'] ?? 'all')); // alle, gebruikers, spaces, posts
+$type = trim((string)($_GET['type'] ?? 'all')); // alles, gebruikers, spaces, posts
 
 $results = [
     'users' => [],
